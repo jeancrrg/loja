@@ -21,8 +21,9 @@
 				<h:inputText value="#{marcaBean.domain.codigo}" style="width:95%" disabled="#{marcaBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{marcaBean.domain.descricao}" style="width:95%" disabled="#{marcaBean.disabledOnDefault}" />
-				
+				<h:inputText value="#{marcaBean.domain.descricao}" style="width:95%" disabled="#{marcaBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
 				
 			</pxt:panelGrid>
 			

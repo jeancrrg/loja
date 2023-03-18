@@ -26,15 +26,22 @@
 				<h:inputText value="#{clienteBean.domain.codigo}" style="width:95%" disabled="#{clienteBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.razaoSocial}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" />
-				<h:inputText value="#{clienteBean.domain.nomeFantasia}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" />
-				<h:inputText value="#{clienteBean.domain.cnpj}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" />
+				<h:inputText value="#{clienteBean.domain.razaoSocial}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
+				<h:inputText value="#{clienteBean.domain.nomeFantasia}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
+				<h:inputText value="#{clienteBean.domain.cnpj}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:onlyNumber />
+				</h:inputText>
 				
 				<rich:calendar datePattern="dd/MM/yyyy" value="#{clienteBean.domain.dataNascimento}" inputStyle="width:75%;"	disabled="#{clienteBean.disabledOnPes}"/>
 				<h:panelGroup>
 					<h:selectBooleanCheckbox value="#{clienteBean.domain.ativo}" disabled="#{clienteBean.disabledOnDefault}" />
 					<h:outputLabel value="Ativo?"  styleClass="outputText" />
 				</h:panelGroup>
+				
 				
 			</pxt:panelGrid>
 			

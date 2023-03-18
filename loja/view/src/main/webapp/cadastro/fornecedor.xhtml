@@ -15,13 +15,15 @@
 			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;30%;15%;" width="60%">
 			
 				<h:outputLabel value="Código" styleClass="outputText" />
-				<h:outputLabel value="Nome" styleClass="outputText" />
+				<h:outputLabel value="Descrição" styleClass="outputText" />
 				<h:outputLabel value="CNPJ" styleClass="outputText" />
 				
 				<h:inputText value="#{fornecedorBean.domain.codigo}" style="width:95%" disabled="#{fornecedorBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{fornecedorBean.domain.descricao}" style="width:95%" disabled="#{fornecedorBean.disabledOnDefault}" />
+				<h:inputText value="#{fornecedorBean.domain.descricao}" style="width:95%" disabled="#{fornecedorBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
 				<h:inputText value="#{fornecedorBean.domain.cnpj}" style="width:95%" disabled="#{fornecedorBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
@@ -33,7 +35,7 @@
 		
 		<ui:define name="colunasTabela" columnsWidth="8%;30%;15%;">
 			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
-			<pxtfl:column headerValue="Nome" value="#{obj.descricao}" />
+			<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" />
 			<pxtfl:column headerValue="CNPJ" value="#{obj.cnpj}" />
 		</ui:define>		
 	</ui:composition>

@@ -55,7 +55,8 @@ public class Marca implements Serializable {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
 	}
-
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -75,6 +76,6 @@ public class Marca implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Marca [codigo=" + codigo + ", descricao=" + descricao + "]";
+		return descricao;
 	}
 }

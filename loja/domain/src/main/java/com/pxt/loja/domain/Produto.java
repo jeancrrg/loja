@@ -97,6 +97,25 @@ public class Produto implements Serializable {
 		this.ativo = ativo;
 	}
 
+	
+	//Médoto para pegar a marca não nulo para usar no xhtml
+	public Marca getMarcaNaoNulo() {
+		if (marca == null) {
+			return new Marca();
+		}
+		return this.marca;
+	}
+	
+	
+	//Médoto para pegar o fornecedor não nulo para usar no xhtml
+	public Fornecedor getFornecedorNaoNulo() {
+		if (fornecedor == null) {
+			return new Fornecedor();
+		}
+		return this.fornecedor;
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -122,10 +141,9 @@ public class Produto implements Serializable {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Produto [codigo=" + codigo + ", descricao=" + descricao
-				+ ", preco=" + preco + ", marca=" + marca + ", fornecedor="
-				+ fornecedor + ", ativo=" + ativo + "]";
+		return descricao;
 	}
 }

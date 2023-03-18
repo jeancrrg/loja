@@ -113,11 +113,4 @@ public class Estoque implements Serializable {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Estoque [codigo=" + codigo + ", produto=" + produto
-				+ ", quantidade=" + quantidade + ", quantidadeReservado="
-				+ quantidadeReservado + ", quantidadeRecebimento="
-				+ quantidadeRecebimento + "]";
-	}
 }

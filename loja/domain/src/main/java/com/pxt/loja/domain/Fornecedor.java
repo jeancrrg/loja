@@ -85,7 +85,6 @@ public class Fornecedor implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Fornecedor [codigo=" + codigo + ", descricao=" + descricao
-				+ ", cnpj=" + cnpj + "]";
+		return descricao;
 	}
 }

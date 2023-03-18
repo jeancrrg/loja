@@ -12,11 +12,13 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;30%;8%;10%" width="60%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;25%;8%;25%;25%;10%" width="100%">
 			
 				<h:outputLabel value="Código" styleClass="outputText" />
 				<h:outputLabel value="Descrição" styleClass="outputText" />
 				<h:outputLabel value="Preço" styleClass="outputText" />
+				<h:outputLabel value="Marca" styleClass="outputText" />
+				<h:outputLabel value="Fornecedor" styleClass="outputText" />
 				<h:panelGroup>
 					<h:selectBooleanCheckbox value="#{produtoBean.domain.ativo}" disabled="#{produtoBean.disabledOnDefault}" />
 					<h:outputLabel value="Ativo?"  styleClass="outputText" />
@@ -26,20 +28,75 @@
 				<h:inputText value="#{produtoBean.domain.codigo}" style="width:95%" disabled="#{produtoBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{produtoBean.domain.descricao}" style="width:95%" disabled="#{produtoBean.disabledOnDefault}" />
+				<h:inputText value="#{produtoBean.domain.descricao}" style="width:95%" disabled="#{produtoBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
 				<h:inputText value="#{produtoBean.domain.preco}" style="width:95%" disabled="#{produtoBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
+				
+				
+				<pxtfl:searchField value="Pesquisar" id="searchMarca" searchProperty="descricao" controller="#{produtoBean.searchMarca}" modalTitle="Marca"
+				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+					<ui:define name="filtros">
+						<pxt:panelGrid columnsWidth="10%;90%">
+						
+							<h:outputText value="Código:" styleClass="outputText" />
+							<h:inputText value="#{produtoBean.searchMarca.searchObject.codigo}" maxlength="14" style="width: 20%;">
+								<pxt:onlyNumber />
+							</h:inputText>
+							
+							<h:outputText value="Descrição:" styleClass="outputText" />
+							<h:inputText value="#{produtoBean.searchMarca.searchObject.descricao}" maxlength="14" style="width: 30%;">
+								<pxt:upperCase />
+							</h:inputText>
+							
+						</pxt:panelGrid>
+					</ui:define>
+					
+					<ui:define name="colunas">
+						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+						<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+					</ui:define>
+				</pxtfl:searchField>
+				
+				
+				<pxtfl:searchField value="Pesquisar" id="searchFornecedor" searchProperty="descricao" controller="#{produtoBean.searchFornecedor}" modalTitle="Fornecedor"
+				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+					<ui:define name="filtros">
+						<pxt:panelGrid columnsWidth="10%;90%">
+						
+							<h:outputText value="Código:" styleClass="outputText" />
+							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.codigo}" maxlength="14" style="width: 20%;">
+								<pxt:onlyNumber />
+							</h:inputText>
+							
+							<h:outputText value="Descrição:" styleClass="outputText" />
+							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.descricao}" maxlength="14" style="width: 30%;">
+								<pxt:upperCase />
+							</h:inputText>
+							
+						</pxt:panelGrid>
+					</ui:define>
+					
+					<ui:define name="colunas">
+						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+						<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+					</ui:define>
+				</pxtfl:searchField>
+				
 				
 			</pxt:panelGrid>
 			
 		</ui:define>
 		
 		
-		<ui:define name="colunasTabela" columnsWidth="8%;30%;8%;10%">
+		<ui:define name="colunasTabela" columnsWidth="8%;25%;8%;25%;25%;10%">
 			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
 			<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" />
 			<pxtfl:column headerValue="Preço" value="#{obj.preco}" />
+			<pxtfl:column headerValue="Marca" value="#{obj.marca}" />
+			<pxtfl:column headerValue="Fornecedor" value="#{obj.fornecedor}" />
 			<pxtfl:column headerValue="Status" value="#{obj.ativo ? 'Ativo' : 'Inativo'}" />
 		</ui:define>		
 	</ui:composition>

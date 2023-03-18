@@ -12,12 +12,13 @@ import com.pxt.loja.domain.Cliente;
 
 @ManagedBean
 @ViewScoped
-public class ClienteBean extends CrudController<Cliente>{
+public class ClienteBean extends CrudController<Cliente> {
 	private static final long serialVersionUID = 1L;
-	
-	private Cliente domain;
+
 	@EJB
 	private PersistenceService persistenceService;
+	private Cliente domain;
+	
 	
 	@Override
 	public Cliente getDomain() {

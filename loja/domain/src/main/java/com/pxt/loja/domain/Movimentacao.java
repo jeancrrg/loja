@@ -33,8 +33,10 @@ public class Movimentacao implements Serializable {
 	private Operacao operacao;
 	
 	@Column(name = "DATINI")
-	private Date data;
+	private Date dataInicial;
 	
+	@Column(name = "DATFIN")
+	private Date dataFinal;
 	
 	@Column(name = "QNTMVT")
 	private Integer quantidadeMovimentada;
@@ -44,12 +46,14 @@ public class Movimentacao implements Serializable {
 	}
 
 
-	public Movimentacao(Long codigo, Produto produto, Operacao operacao, Date data, Integer quantidadeMovimentada) {
+	public Movimentacao(Long codigo, Produto produto, Operacao operacao,
+			Date dataInicial, Date dataFinal, Integer quantidadeMovimentada) {
 		super();
 		this.codigo = codigo;
 		this.produto = produto;
 		this.operacao = operacao;
-		this.data = data;
+		this.dataInicial = dataInicial;
+		this.dataFinal = dataFinal;
 		this.quantidadeMovimentada = quantidadeMovimentada;
 	}
 
@@ -75,11 +79,18 @@ public class Movimentacao implements Serializable {
 		this.operacao = operacao;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getDataInicial() {
+		return dataInicial;
 	}
-	public void setData(Date data) {
-		this.data = data;
+	public void setDataInicial(Date dataInicial) {
+		this.dataInicial = dataInicial;
+	}
+
+	public Date getDataFinal() {
+		return dataFinal;
+	}
+	public void setDataFinal(Date dataFinal) {
+		this.dataFinal = dataFinal;
 	}
 
 	public Integer getQuantidadeMovimentada() {
@@ -89,6 +100,16 @@ public class Movimentacao implements Serializable {
 		this.quantidadeMovimentada = quantidadeMovimentada;
 	}
 
+	
+	//Método para pegar o Produto não nulo para usar no xhtml
+	public Produto getProdutoNaoNulo() {
+		if (produto == null) {
+			return new Produto();
+		}
+		return this.produto;
+	}
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,6 +117,7 @@ public class Movimentacao implements Serializable {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -114,10 +136,12 @@ public class Movimentacao implements Serializable {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Movimentacao [codigo=" + codigo + ", produto=" + produto
-				+ ", operacao=" + operacao + ", data=" + data
-				+ ", quantidadeMovimentada=" + quantidadeMovimentada + "]";
+				+ ", operacao=" + operacao + ", dataInicial=" + dataInicial
+				+ ", dataFinal=" + dataFinal + ", quantidadeMovimentada="
+				+ quantidadeMovimentada + "]";
 	}
 }

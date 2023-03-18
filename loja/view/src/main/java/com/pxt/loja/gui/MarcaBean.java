@@ -10,15 +10,14 @@ import pxt.framework.faces.exception.CrudException;
 
 import com.pxt.loja.domain.Marca;
 
-
 @ManagedBean
 @ViewScoped
 public class MarcaBean extends CrudController<Marca>{
 	private static final long serialVersionUID = 1L;
-
-	private Marca domain;
+	
 	@EJB
 	private PersistenceService persistenceService;
+	private Marca domain;
 	
 	
 	@Override
@@ -46,5 +45,4 @@ public class MarcaBean extends CrudController<Marca>{
 		}
 		super.antesSalvar();
 	}
-	
 }
