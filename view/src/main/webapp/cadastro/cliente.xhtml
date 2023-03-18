@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:pxt="http://www.peixoto.com.br/pxtFaces"
+	xmlns:pxtfl="http://www.peixoto.com.br/jsf" xmlns:pxtfc="http://www.peixoto.com.br/jsf/core">
+
+	<ui:composition template="/META-INF/facelets/templates/crud.xhtml">
+		<ui:param name="form_id" value="formCliente" />
+		<ui:param name="backingBean" value="#{clienteBean}" />
+		<ui:param name="titulo" value="Cliente" />
+	
+		<ui:define name="panelCadastro">
+			
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;20%;20%;15%;10%;10%" width="100%">
+				
+				<h:outputLabel value="Código" styleClass="outputText" />
+				<h:outputLabel value="Razão Social" styleClass="outputText" />
+				<h:outputLabel value="Nome Fantasia" styleClass="outputText" />
+				<h:outputLabel value="CNPJ" styleClass="outputText" />
+				<pxt:cell colspan="2">
+					<h:outputText value="Data de Nascimento:" styleClass="outputText" />
+				</pxt:cell>
+				
+				
+				<h:inputText value="#{clienteBean.domain.codigo}" style="width:95%" disabled="#{clienteBean.disabledOnInsEdi}" >
+					<pxt:onlyNumber />
+				</h:inputText>
+				<h:inputText value="#{clienteBean.domain.razaoSocial}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
+				<h:inputText value="#{clienteBean.domain.nomeFantasia}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:upperCase />
+				</h:inputText>
+				<h:inputText value="#{clienteBean.domain.cnpj}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:onlyNumber />
+				</h:inputText>
+				
+				<rich:calendar datePattern="dd/MM/yyyy" value="#{clienteBean.domain.dataNascimento}" inputStyle="width:75%;"	disabled="#{clienteBean.disabledOnPes}"/>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{clienteBean.domain.ativo}" disabled="#{clienteBean.disabledOnDefault}" />
+					<h:outputLabel value="Ativo?"  styleClass="outputText" />
+				</h:panelGroup>
+				
+				
+			</pxt:panelGrid>
+			
+		</ui:define>
+		
+		
+		<ui:define name="colunasTabela" columnsWidth="8%;20%;20%;20%;10%;10%">
+		
+			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
+			<pxtfl:column headerValue="Razão Social" value="#{obj.razaoSocial}" />
+			<pxtfl:column headerValue="Nome Fantasia" value="#{obj.nomeFantasia}" />
+			<pxtfl:column headerValue="CNPJ" value="#{obj.cnpj}" />
+			<pxtfl:column headerValue="Data de Nascimento " value="#{obj.dataNascimento}" />
+			<pxtfl:column headerValue="Status" value="#{obj.ativo ? 'Ativo' : 'Inativo'}" />
+			
+		</ui:define>	
+			
+	</ui:composition>
+</html>
