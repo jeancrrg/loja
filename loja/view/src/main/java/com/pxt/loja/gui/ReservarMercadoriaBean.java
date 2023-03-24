@@ -84,7 +84,6 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 		return this.searchCliente;
 	}
 	
-	
 	@SuppressWarnings("serial")
 	public SearchFieldController<Produto> getSearchProduto() {
 		if (this.searchProduto == null) {
@@ -116,30 +115,29 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 		return this.searchProduto;
 	}
 	
-	
 	@Override
 	protected void antesSalvar() throws CrudException {
-		if (getDomain().getQuantidade() <= 0) {
-			throw new CrudException("Não é possível inserir quantidade 0 ou abaixo de 0!");
+		if (getDomain().getCliente() == null) {
+			throw new CrudException("É obrigatório preencher o cliente!");
+		}
+		if (getDomain().getProduto() == null) {
+			throw new CrudException("É obrigatório preencher o produto!");
+		}
+		if (getDomain().getQuantidade() == null || getDomain().getQuantidade() <= 0) {
+			throw new CrudException("Não é possível inserir quantidade 0, negativo ou vazio!");
 		}
 		super.antesSalvar();
 	}
-	
 	
 	@Override
 	protected void salvar() throws CrudException, TransactionException {
 		try {
 			estoqueBO.reservarMercadoria(getDomain());
-		} catch (PersistenceException e) {
-			throw new CrudException("ERRO ao reservar mercadoria: " + e.getMessage() + e.getStackTrace());
-		}
-		
-		try {
 			pedidoBO.salvarPedido(getDomain());
 		} catch (PersistenceException e) {
-			throw new CrudException("ERRO ao salvar pedido de reserva: " + e.getStackTrace());
+			e.printStackTrace();
+			msgWarn(e.getMessage());
 		}
 	}
-		
 		
 }

@@ -30,7 +30,7 @@
 							</h:inputText>
 							
 							<h:outputText value="Descrição:" styleClass="outputText" />
-							<h:inputText value="#{liberarMercadoriaBean.searchProduto.searchObject.descricao}" maxlength="14" style="width: 30%;">
+							<h:inputText value="#{liberarMercadoriaBean.searchProduto.searchObject.descricao}" maxlength="180" style="width: 30%;">
 								<pxt:upperCase />
 							</h:inputText>
 							
@@ -43,11 +43,11 @@
 					</ui:define>
 				</pxtfl:searchField>
 				
-				<h:inputText value="#{liberarMercadoriaBean.domain.quantidadeRecebimento}" style="width:95%" disabled="#{liberarMercadoriaBean.disabledOnDefault}" >
+				<h:inputText value="#{liberarMercadoriaBean.domain.quantidadeRecebimento}" style="width:95%" maxlength="14" disabled="#{liberarMercadoriaBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				
-				<h:inputText value="#{liberarMercadoriaBean.descricaoMovimentacao}" style="width:95%" disabled="#{liberarMercadoriaBean.disabledOnDefault}" >
+				<h:inputText value="#{liberarMercadoriaBean.descricaoMovimentacao}" style="width:95%" maxlength="180" disabled="#{liberarMercadoriaBean.disabledOnDefault}" >
 					<pxt:upperCase />
 				</h:inputText>
 				

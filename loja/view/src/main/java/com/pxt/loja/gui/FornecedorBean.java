@@ -42,7 +42,10 @@ public class FornecedorBean extends CrudController<Fornecedor>{
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
-			throw new CrudException("O nome do fornecedor é um campo obrigatório!");
+			throw new CrudException("O nome é um campo obrigatório!");
+		}
+		if (getDomain().getCnpj() == null || getDomain().getCnpj().isEmpty()) {
+			throw new CrudException("O CNPJ é um campo obrigatório!");
 		}
 		super.antesSalvar();
 	}

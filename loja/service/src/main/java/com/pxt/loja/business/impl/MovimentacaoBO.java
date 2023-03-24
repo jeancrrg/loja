@@ -21,18 +21,22 @@ public class MovimentacaoBO {
 	private MovimentacaoDAO movimentacaoDAO;
 	
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void salvarMovimentacao(Estoque estoque, String descricaoMovimentacao, Operacao operacao) throws PersistenceException {
-		Movimentacao movimentacao = new Movimentacao();
-		Date data = new Date();
+		try {
+			Movimentacao movimentacao = new Movimentacao();
+			Date data = new Date();
+			
+			movimentacao.setData(data);
+			movimentacao.setQuantidade(estoque.getQuantidadeRecebimento());
+			movimentacao.setProduto(estoque.getProduto());
+			movimentacao.setOperacao(operacao);
+			movimentacao.setDescricao(descricaoMovimentacao);
 		
-		movimentacao.setData(data);
-		movimentacao.setQuantidade(estoque.getQuantidadeRecebimento());
-		movimentacao.setProduto(estoque.getProduto());
-		movimentacao.setOperacao(operacao);
-		movimentacao.setDescricao(descricaoMovimentacao);
-
-		movimentacaoDAO.save(movimentacao);
+			movimentacaoDAO.save(movimentacao);
+		} catch (PersistenceException e) {
+			throw new PersistenceException("ERRO: Não foi possível salvar a movimentação! ", e);
+		}
+		
 	}
 	
 }

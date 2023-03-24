@@ -30,12 +30,12 @@
 							</h:inputText>
 							
 							<h:outputText value="CNPJ:" styleClass="outputText" />
-							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.cnpj}" maxlength="14" style="width: 25%;">
+							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.cnpj}" maxlength="18" style="width: 25%;">
 								<pxt:onlyNumber />
 							</h:inputText>
 							
 							<h:outputText value="Razão social:" styleClass="outputText" />
-							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.razaoSocial}" maxlength="14" style="width: 40%;">
+							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.razaoSocial}" maxlength="180" style="width: 40%;">
 								<pxt:upperCase />
 							</h:inputText>
 							
@@ -61,7 +61,7 @@
 							</h:inputText>
 							
 							<h:outputText value="Descrição:" styleClass="outputText" />
-							<h:inputText value="#{reservarMercadoriaBean.searchProduto.searchObject.descricao}" maxlength="14" style="width: 30%;">
+							<h:inputText value="#{reservarMercadoriaBean.searchProduto.searchObject.descricao}" maxlength="180" style="width: 30%;">
 								<pxt:upperCase />
 							</h:inputText>
 							
@@ -75,7 +75,7 @@
 				</pxtfl:searchField>
 				
 				
-				<h:inputText value="#{reservarMercadoriaBean.domain.quantidade}" style="width:95%" disabled="#{reservarMercadoriaBean.disabledOnDefault}" >
+				<h:inputText value="#{reservarMercadoriaBean.domain.quantidade}" style="width:95%" maxlength="14" disabledOn="#{reservarMercadoriaBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				

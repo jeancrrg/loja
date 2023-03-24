@@ -61,6 +61,11 @@ public class ReceberMercadoriaBean extends CrudController<Estoque> {
 		this.descricaoMovimentacao = descricaoMovimentacao;
 	}
 	
+	@Override
+	protected void buscar() throws TransactionException {
+		setListagem(estoqueBO.buscarEstoque(getDomain()));
+	}
+	
 	
 	@SuppressWarnings("serial")
 	public SearchFieldController<Produto> getSearchProduto() {
@@ -94,16 +99,14 @@ public class ReceberMercadoriaBean extends CrudController<Estoque> {
 	}
 	
 	@Override
-	protected void buscar() throws TransactionException {
-		setListagem(estoqueBO.buscarEstoque(getDomain()));
-	}
-	
-	@Override
 	protected void antesSalvar() throws CrudException {
-		if (getDomain().getQuantidadeRecebimento() <= 0) {
-			throw new CrudException("A quantidade de recebimento não pode ser 0 ou negativo!");
-			
-		} if (getDescricaoMovimentacao() == null || getDescricaoMovimentacao().isEmpty()) {
+		if (getDomain().getProduto() == null) {
+			throw new CrudException("É obrigatório preencher o produto!");
+		}
+		if (getDomain().getQuantidadeRecebimento() == null || getDomain().getQuantidadeRecebimento() <= 0) {
+			throw new CrudException("A quantidade de recebimento não pode ser 0, negativo ou vazio!");
+		}
+		if (getDescricaoMovimentacao() == null || getDescricaoMovimentacao().isEmpty()) {
 			throw new CrudException("É obrigatório preencher o campo de descrição!");
 		}
 		super.antesSalvar();
@@ -113,16 +116,11 @@ public class ReceberMercadoriaBean extends CrudController<Estoque> {
 	protected void salvar() throws CrudException, TransactionException {
 		try {
 			estoqueBO.receberMercadoria(getDomain());
-		} catch (PersistenceException e) {
-			throw new CrudException("ERRO ao receber mercadoria:" + e.getMessage() + e.getStackTrace());
-		}
-		
-		try {
 			movimentacaoBO.salvarMovimentacao(getDomain(), descricaoMovimentacao, Operacao.RECEBIMENTO);
 		} catch (PersistenceException e) {
-			throw new CrudException("ERRO ao salvar movimentação de recebimento:" + e.getStackTrace());
+			e.printStackTrace();
+			throw new CrudException(e.getMessage());
 		}
-		
 	}
 	
 }

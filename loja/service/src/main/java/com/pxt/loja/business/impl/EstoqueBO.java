@@ -1,13 +1,9 @@
 package com.pxt.loja.business.impl;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 
 import pxt.framework.persistence.PersistenceException;
 
@@ -24,62 +20,63 @@ public class EstoqueBO {
 	PedidoBO pedidoBO;
 	
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Estoque> buscarEstoque(Estoque estoque) {
 		return estoqueDAO.buscarEstoque(estoque);
 	}
 	
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Estoque buscarEstoquePorCodigo(Long codigo) {
+	public Estoque buscarEstoquePorCodigo(Long codigo) throws PersistenceException {
 		return estoqueDAO.buscarEstoquePorCodigo(codigo);
 	}
 	
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void receberMercadoria(Estoque estoque) throws PersistenceException {
-		List<Estoque> listaEstoque = estoqueDAO.buscarEstoque(estoque);
-		Estoque estoqueSalvar;
-		
-		if (listaEstoque.isEmpty()) {
-			estoqueSalvar = new Estoque();
-				
-			estoqueSalvar.setProduto(estoque.getProduto());
-			estoqueSalvar.setQuantidadeDisponivel(0);
-			estoqueSalvar.setQuantidadeReservado(0);
-			estoqueSalvar.setQuantidadeRecebimento(estoque.getQuantidadeRecebimento());
-		
-		} else {
-			estoqueSalvar = listaEstoque.get(0);
-			estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + estoque.getQuantidadeRecebimento());
+		try {
+			List<Estoque> estoqueAtual = estoqueDAO.buscarEstoque(estoque);
+			Estoque estoqueSalvar;
+			
+			if (estoqueAtual.isEmpty()) {
+				estoqueSalvar = new Estoque();
+					
+				estoqueSalvar.setProduto(estoque.getProduto());
+				estoqueSalvar.setQuantidadeDisponivel(0);
+				estoqueSalvar.setQuantidadeReservado(0);
+				estoqueSalvar.setQuantidadeRecebimento(estoque.getQuantidadeRecebimento());
+			
+			} else {
+				estoqueSalvar = estoqueAtual.get(0);
+				estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + estoque.getQuantidadeRecebimento());
+			}
+			estoqueDAO.saveOrUpdate(estoqueSalvar);
+		} catch (PersistenceException e) {
+			throw new PersistenceException("ERRO: Não foi possível salvar o estoque de recebimento!", e);
 		}
-		estoqueDAO.saveOrUpdate(estoqueSalvar);
 	}
 	
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void liberarMercadoria(Estoque estoque) throws PersistenceException {
-		List<Estoque> listaEstoque = estoqueDAO.buscarEstoque(estoque);
-		Estoque estoqueAtual = new Estoque();
-		
-		if (listaEstoque.isEmpty()) {
-			throw new PersistenceException("Produto não encontrado no estoque!");
-		} else {
-			estoqueAtual = listaEstoque.get(0);
+			List<Estoque> listaEstoque = estoqueDAO.buscarEstoque(estoque);
+			Estoque estoqueAtual = new Estoque();
+			
+			if (listaEstoque.isEmpty()) {
+				throw new PersistenceException("Produto não encontrado no estoque!");
+			} else {
+				estoqueAtual = listaEstoque.get(0);
+			}
+			if (estoque.getQuantidadeRecebimento() > estoqueAtual.getQuantidadeRecebimento()) {
+				throw new PersistenceException("Não é possível realizar a movimentação dessa quantidade! Quantidade em recebimento: " + estoqueAtual.getQuantidadeRecebimento());
+			}
+			estoqueAtual.setQuantidadeDisponivel(estoqueAtual.getQuantidadeDisponivel() + estoque.getQuantidadeRecebimento());
+			estoqueAtual.setQuantidadeRecebimento(estoqueAtual.getQuantidadeRecebimento() - estoque.getQuantidadeRecebimento());
+			
+		try {
+			estoqueDAO.saveOrUpdate(estoqueAtual);
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Não foi possível salvar estoque de liberação!", e);
 		}
-		
-		if (estoque.getQuantidadeRecebimento() > estoqueAtual.getQuantidadeRecebimento()) {
-			throw new PersistenceException("Não é possível realizar a movimentação dessa quantidade! Quantidade em recebimento: " + estoqueAtual.getQuantidadeRecebimento());
-		}
-		
-		estoqueAtual.setQuantidadeDisponivel(estoqueAtual.getQuantidadeDisponivel() + estoque.getQuantidadeRecebimento());
-		estoqueAtual.setQuantidadeRecebimento(estoqueAtual.getQuantidadeRecebimento() - estoque.getQuantidadeRecebimento());
-		
-		estoqueDAO.saveOrUpdate(estoqueAtual);
 	}
 	
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void reservarMercadoria(Pedido pedido) throws PersistenceException {
 		Estoque estoqueAtual = estoqueDAO.buscarEstoquePorCodigo(pedido.getProduto().getCodigo());
 		
@@ -89,11 +86,14 @@ public class EstoqueBO {
 		if (estoqueAtual.getQuantidadeDisponivel() < pedido.getQuantidade()) {
 			throw new PersistenceException("Quantidade indisponível no estoque! Quantidade disponível: " + estoqueAtual.getQuantidadeDisponivel());
 		}
-		
 		estoqueAtual.setQuantidadeDisponivel(estoqueAtual.getQuantidadeDisponivel() - pedido.getQuantidade());
 		estoqueAtual.setQuantidadeReservado(estoqueAtual.getQuantidadeReservado() + pedido.getQuantidade());
 		
-		estoqueDAO.saveOrUpdate(estoqueAtual);
+		try {
+			estoqueDAO.saveOrUpdate(estoqueAtual);
+		} catch (PersistenceException e) {
+			throw new PersistenceException("ERRO: Não foi possível salvar estoque de reserva!", e);
+		}
 	}
 	
 }

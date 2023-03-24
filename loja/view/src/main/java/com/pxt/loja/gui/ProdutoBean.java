@@ -1,5 +1,6 @@
 package com.pxt.loja.gui;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -110,7 +111,16 @@ public class ProdutoBean extends CrudController<Produto> {
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
-			throw new CrudException("A descrição do produto é um campo obrigatório!");
+			throw new CrudException("A descrição é um campo obrigatório!");
+		}
+		if (getDomain().getPreco() == null || getDomain().getPreco().compareTo(BigDecimal.ZERO) <= 0) {
+			throw new CrudException("O preço não pode ser 0, negativo ou vazio!");
+		}
+		if (getDomain().getMarca() == null) {
+			throw new CrudException("A marca é um campo obrigatório!");
+		}
+		if (getDomain().getFornecedor() == null) {
+			throw new CrudException("O fornecedor é um campo obrigatório!");
 		}
 		super.antesSalvar();
 	}

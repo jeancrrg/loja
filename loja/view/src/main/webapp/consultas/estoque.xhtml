@@ -30,23 +30,39 @@
 			actionListener="#{estoqueBean.busca}" render="tableLog,mensagemGeral,messagePane,dataGrid,chart"/>
 		</ui:define>
 		
-		<ui:define name="toolbarExtraButtons">
-			<h:commandButton value="Exportar" title="Exportar para Excel" render="mensagemGeral,messagePane,chartTeste" styleClass="btnToolbar" 
-			style="background:transparent url(#{facesContext.externalContext.requestContextPath}/resources/img/excel_16x16.png) no-repeat center left; width: 100px;"  
-			action="#{estoqueBean.exportar}"/>
-		</ui:define>
-		
 		<ui:define name="panelFiltro">
-		
-			<pxt:panelGrid columnsWidth="30%" width="30%">
-				<h:outputText value="Descricao" styleClass="outputText" />
 			
-				<h:inputText value="#{estoqueBean.domain.produto}" style="width:95%" disabled="#{estoqueBean.disabledOnDefault}" >
-					<pxt:upperCase />
-				</h:inputText>
-		
+			<pxt:panelGrid columnsWidth="30%" width="30%">
+			
+				<h:outputText value="Produto:" styleClass="outputText" />
+				
+				
+				<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{estoqueBean.searchProduto}" modalTitle="Produto" width="95%"
+				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+					<ui:define name="filtros">
+						<pxt:panelGrid columnsWidth="10%;90%">
+						
+							<h:outputText value="Código:" styleClass="outputText" />
+							<h:inputText value="#{estoqueBean.searchProduto.searchObject.codigo}" maxlength="14" style="width: 20%;">
+								<pxt:onlyNumber />
+							</h:inputText>
+							
+							<h:outputText value="Descrição:" styleClass="outputText" />
+							<h:inputText value="#{estoqueBean.searchProduto.searchObject.descricao}" maxlength="14" style="width: 30%;">
+								<pxt:upperCase />
+							</h:inputText>
+							
+						</pxt:panelGrid>
+					</ui:define>
+					
+					<ui:define name="colunas">
+						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+						<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+					</ui:define>
+				</pxtfl:searchField>
+				
+				
 			</pxt:panelGrid>
-		
 		
 		</ui:define>
 		

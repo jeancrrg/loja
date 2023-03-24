@@ -22,19 +22,23 @@ public class PedidoBO {
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void salvarPedido(Pedido pedido) throws PersistenceException {
-		Pedido pedidoSalvar = new Pedido();
-		Date data = new Date();
-		
-		pedidoSalvar.setCliente(pedido.getCliente());
-		pedidoSalvar.setProduto(pedido.getProduto());
-		pedidoSalvar.setQuantidade(pedido.getQuantidade());
-		pedidoSalvar.setData(data);
-		
-		BigDecimal precoProduto  = pedido.getProduto().getPreco();
-		Integer quantidadeProduto = pedido.getQuantidade();
-		pedidoSalvar.setTotal(precoProduto.multiply(BigDecimal.valueOf(quantidadeProduto)));
-		
-		pedidoDAO.save(pedidoSalvar);
+		try {
+			Pedido pedidoSalvar = new Pedido();
+			Date data = new Date();
+			
+			pedidoSalvar.setCliente(pedido.getCliente());
+			pedidoSalvar.setProduto(pedido.getProduto());
+			pedidoSalvar.setQuantidade(pedido.getQuantidade());
+			pedidoSalvar.setData(data);
+			
+			BigDecimal precoProduto  = pedido.getProduto().getPreco();
+			Integer quantidadeProduto = pedido.getQuantidade();
+			pedidoSalvar.setTotal(precoProduto.multiply(BigDecimal.valueOf(quantidadeProduto)));
+			
+			pedidoDAO.save(pedidoSalvar);
+		} catch (PersistenceException e) {
+			throw new PersistenceException("ERRO: Não foi possível salvar o pedido " + pedido.getCodigo());
+		}
 	}
 	
 	

@@ -46,6 +46,12 @@ public class ClienteBean extends CrudController<Cliente> {
 		if (getDomain().getNomeFantasia() == null || getDomain().getNomeFantasia().isEmpty()) {
 			throw new CrudException("O nome fantasia é um campo obrigatório!");
 		}
+		if (getDomain().getCnpj() == null || getDomain().getCnpj().isEmpty()) {
+			throw new CrudException("O CNPJ é um campo obrigatório!");
+		}
+		if (getDomain().getDataNascimento() == null) {
+			throw new CrudException("A data de nascimento é um campo obrigatório!");
+		}
 		super.antesSalvar();
 	}
 	
