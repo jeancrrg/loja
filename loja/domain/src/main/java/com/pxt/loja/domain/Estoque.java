@@ -4,12 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -18,17 +15,12 @@ public class Estoque implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LJESTOQUE")
-	@SequenceGenerator(sequenceName = "SEQ_LJESTOQUE", allocationSize = 1, name = "SEQ_LJESTOQUE")
-	@Column(name = "CODEST")
-	private Long codigo;
-	
 	@OneToOne
 	@JoinColumn(name = "CODPROD", referencedColumnName = "CODPROD")
 	private Produto produto;
 	
-	@Column(name = "QNTPROD")
-	private Integer quantidade;
+	@Column(name = "QNTDSP")
+	private Integer quantidadeDisponivel;
 	
 	@Column(name = "QNTRSV")
 	private Integer quantidadeReservado;
@@ -41,23 +33,15 @@ public class Estoque implements Serializable {
 	}
 
 
-	public Estoque(Long codigo, Produto produto, Integer quantidade,
+	public Estoque(Produto produto, Integer quantidadeDisponivel,
 			Integer quantidadeReservado, Integer quantidadeRecebimento) {
 		super();
-		this.codigo = codigo;
 		this.produto = produto;
-		this.quantidade = quantidade;
+		this.quantidadeDisponivel = quantidadeDisponivel;
 		this.quantidadeReservado = quantidadeReservado;
 		this.quantidadeRecebimento = quantidadeRecebimento;
 	}
 
-
-	public Long getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
 
 	public Produto getProduto() {
 		return produto;
@@ -66,11 +50,11 @@ public class Estoque implements Serializable {
 		this.produto = produto;
 	}
 	
-	public Integer getQuantidade() {
-		return quantidade;
+	public Integer getQuantidadeDisponivel() {
+		return quantidadeDisponivel;
 	}
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setQuantidadeDisponivel(Integer quantidadeDisponivel) {
+		this.quantidadeDisponivel = quantidadeDisponivel;
 	}
 
 	public Integer getQuantidadeReservado() {
@@ -87,30 +71,13 @@ public class Estoque implements Serializable {
 		this.quantidadeRecebimento = quantidadeRecebimento;
 	}
 
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
-		return result;
+	public Produto getProdutoNaoNulo() {
+		if (produto == null) {
+			return new Produto();
+		}
+		return this.produto;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Estoque other = (Estoque) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
-				return false;
-		} else if (!codigo.equals(other.codigo))
-			return false;
-		return true;
-	}
+	
 
 }

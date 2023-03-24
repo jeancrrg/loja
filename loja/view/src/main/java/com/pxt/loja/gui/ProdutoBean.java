@@ -45,14 +45,6 @@ public class ProdutoBean extends CrudController<Produto> {
 		return persistenceService;
 	}
 
-	@Override
-	protected void antesSalvar() throws CrudException {
-		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
-			throw new CrudException("A descrição do produto é um campo obrigatório!");
-		}
-		super.antesSalvar();
-	}
-	
 	@SuppressWarnings("serial")
 	public SearchFieldController<Marca> getSearchMarca() {
 		if (this.searchMarca == null) {
@@ -112,6 +104,15 @@ public class ProdutoBean extends CrudController<Produto> {
 			};
 		}
 		return this.searchFornecedor; 
+	}
+	
+	
+	@Override
+	protected void antesSalvar() throws CrudException {
+		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
+			throw new CrudException("A descrição do produto é um campo obrigatório!");
+		}
+		super.antesSalvar();
 	}
 	
 }

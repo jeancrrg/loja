@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:pxt="http://www.peixoto.com.br/pxtFaces"
+	xmlns:pxtfl="http://www.peixoto.com.br/jsf" xmlns:pxtfc="http://www.peixoto.com.br/jsf/core">
+
+	<ui:composition template="/META-INF/facelets/templates/crud.xhtml">
+		<ui:param name="form_id" value="formReservarMercadoria" />
+		<ui:param name="backingBean" value="#{reservarMercadoriaBean}" />
+		<ui:param name="titulo" value="Reservar mercadoria" />
+	
+		<ui:define name="panelCadastro">
+			
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="20%;20%;10%" width="50%">
+			
+				<h:outputLabel value="Cliente" styleClass="outputText" />
+				<h:outputLabel value="Produto" styleClass="outputText" />
+				<h:outputLabel value="Quantidade reservada" styleClass="outputText" />
+				
+				
+				<pxtfl:searchField value="Pesquisar" id="searchCliente" searchProperty="razaoSocial" controller="#{reservarMercadoriaBean.searchCliente}" modalTitle="Cliente" disabledOn="#{reservarMercadoriaBean.disabledOnDefault}" width="95%"
+				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+					<ui:define name="filtros">
+						<pxt:panelGrid columnsWidth="10%;90%">
+						
+							<h:outputText value="Código:" styleClass="outputText" />
+							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.codigo}" maxlength="14" style="width: 15%;">
+								<pxt:onlyNumber />
+							</h:inputText>
+							
+							<h:outputText value="CNPJ:" styleClass="outputText" />
+							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.cnpj}" maxlength="14" style="width: 25%;">
+								<pxt:onlyNumber />
+							</h:inputText>
+							
+							<h:outputText value="Razão social:" styleClass="outputText" />
+							<h:inputText value="#{reservarMercadoriaBean.searchCliente.searchObject.razaoSocial}" maxlength="14" style="width: 40%;">
+								<pxt:upperCase />
+							</h:inputText>
+							
+						</pxt:panelGrid>
+					</ui:define>
+					
+					<ui:define name="colunas">
+						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+						<pxtfl:column headerValue="CNPJ" value="#{obj.cnpj}" columnWidth="20%" />
+						<pxtfl:column headerValue="Razão social" value="#{obj.razaoSocial}" columnWidth="20%" />
+					</ui:define>
+				</pxtfl:searchField>
+				
+				
+				<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{reservarMercadoriaBean.searchProduto}" modalTitle="Produto" disabledOn="#{reservarMercadoriaBean.disabledOnDefault}" width="95%"
+				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+					<ui:define name="filtros">
+						<pxt:panelGrid columnsWidth="10%;90%">
+						
+							<h:outputText value="Código:" styleClass="outputText" />
+							<h:inputText value="#{reservarMercadoriaBean.searchProduto.searchObject.codigo}" maxlength="14" style="width: 20%;">
+								<pxt:onlyNumber />
+							</h:inputText>
+							
+							<h:outputText value="Descrição:" styleClass="outputText" />
+							<h:inputText value="#{reservarMercadoriaBean.searchProduto.searchObject.descricao}" maxlength="14" style="width: 30%;">
+								<pxt:upperCase />
+							</h:inputText>
+							
+						</pxt:panelGrid>
+					</ui:define>
+					
+					<ui:define name="colunas">
+						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+						<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+					</ui:define>
+				</pxtfl:searchField>
+				
+				
+				<h:inputText value="#{reservarMercadoriaBean.domain.quantidade}" style="width:95%" disabled="#{reservarMercadoriaBean.disabledOnDefault}" >
+					<pxt:onlyNumber />
+				</h:inputText>
+				
+			</pxt:panelGrid>
+			
+		</ui:define>
+		
+		
+		<ui:define name="colunasTabela" columnsWidth="25%;25%;8%">
+			<pxtfl:column headerValue="Cliente" value="#{obj.cliente}" />
+			<pxtfl:column headerValue="Produto" value="#{obj.produto}" />
+			<pxtfl:column headerValue="Quantidade reservada" value="#{obj.quantidade}" />
+		</ui:define>		
+	</ui:composition>
+</html>

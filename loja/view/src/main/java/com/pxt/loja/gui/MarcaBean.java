@@ -41,7 +41,7 @@ public class MarcaBean extends CrudController<Marca>{
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
-			throw new CrudException("A descrição da marca é um campo obrigatório!");
+			throw new CrudException("O nome da marca é um campo obrigatório!");
 		}
 		super.antesSalvar();
 	}

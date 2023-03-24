@@ -1,12 +1,11 @@
 package com.pxt.loja.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,48 +15,46 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "JEANCRG.TLJMOVIMENTACAO")
-public class Movimentacao implements Serializable {
+@Table(name = "JEANCRG.TLJPEDIDO")
+public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LJMOVIMENTACAO")
-	@SequenceGenerator(sequenceName = "SEQ_LJMOVIMENTACAO", allocationSize = 1, name = "SEQ_LJMOVIMENTACAO")
-	@Column(name = "CODMOV")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LJPEDIDO")
+	@SequenceGenerator(sequenceName = "SEQ_LJPEDIDO", allocationSize = 1, name = "SEQ_LJPEDIDO")
+	@Column(name = "CODPED")
 	private Long codigo;
 	
-	@Column(name = "DESMOV")
-	private String descricao;
+	@ManyToOne
+	@JoinColumn(name = "CODCLI", referencedColumnName = "CODCLI")
+	private Cliente cliente;
 	
 	@ManyToOne
 	@JoinColumn(name = "CODPROD", referencedColumnName = "CODPROD")
 	private Produto produto;
 	
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "DESOPR")
-	private Operacao operacao;
-	
-	@Column(name = "DATMOV")
-	private Date data;
-	
-	@Column(name = "QNTMOV")
+	@Column(name = "QNTPROD")
 	private Integer quantidade;
+	@Column(name = "DATPED")
+	private Date data;
+	@Column(name = "TOTPED")
+	private BigDecimal total;
 	
 	
-	public Movimentacao() {
+	public Pedido() {
+		
 	}
 
-	
-	public Movimentacao(Long codigo, String descricao, Produto produto,
-			Operacao operacao, Date data, Integer quantidade) {
+
+	public Pedido(Long codigo, Cliente cliente, Produto produto,
+			Integer quantidade, Date data, BigDecimal total) {
 		super();
 		this.codigo = codigo;
-		this.descricao = descricao;
+		this.cliente = cliente;
 		this.produto = produto;
-		this.operacao = operacao;
-		this.data = data;
 		this.quantidade = quantidade;
+		this.data = data;
+		this.total = total;
 	}
 
 
@@ -68,11 +65,11 @@ public class Movimentacao implements Serializable {
 		this.codigo = codigo;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public Cliente getCliente() {
+		return cliente;
 	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Produto getProduto() {
@@ -82,11 +79,11 @@ public class Movimentacao implements Serializable {
 		this.produto = produto;
 	}
 
-	public Operacao getOperacao() {
-		return operacao;
+	public Integer getQuantidade() {
+		return quantidade;
 	}
-	public void setOperacao(Operacao operacao) {
-		this.operacao = operacao;
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	public Date getData() {
@@ -96,15 +93,20 @@ public class Movimentacao implements Serializable {
 		this.data = data;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public BigDecimal getTotal() {
+		return total;
 	}
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
-
-	//Método para pegar o Produto não nulo para usar no xhtml
+	public Cliente getClienteNaoNulo() {
+		if (cliente == null) {
+			return new Cliente();
+		}
+		return this.cliente;
+	}
+	
 	public Produto getProdutoNaoNulo() {
 		if (produto == null) {
 			return new Produto();
@@ -121,7 +123,6 @@ public class Movimentacao implements Serializable {
 		return result;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -130,7 +131,7 @@ public class Movimentacao implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Movimentacao other = (Movimentacao) obj;
+		Pedido other = (Pedido) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -138,10 +139,7 @@ public class Movimentacao implements Serializable {
 			return false;
 		return true;
 	}
-
-
-	@Override
-	public String toString() {
-		return descricao;
-	}
+	
+	
+	
 }

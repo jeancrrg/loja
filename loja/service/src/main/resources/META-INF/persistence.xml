@@ -11,13 +11,14 @@
 		<class>com.pxt.loja.domain.Cliente</class>
 		<class>com.pxt.loja.domain.Estoque</class>
 		<class>com.pxt.loja.domain.Movimentacao</class>
- 		<class>com.pxt.loja.domain.Operacao</class>
  		<class>com.pxt.loja.domain.Produto</class>
 		<class>com.pxt.loja.domain.Marca</class>
 		<class>com.pxt.loja.domain.Fornecedor</class>
+		<class>com.pxt.loja.domain.Pedido</class>
 		
 		
 		<properties>
+		
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />

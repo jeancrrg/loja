@@ -36,7 +36,7 @@
 				</h:inputText>
 				
 				
-				<pxtfl:searchField value="Pesquisar" id="searchMarca" searchProperty="descricao" controller="#{produtoBean.searchMarca}" modalTitle="Marca"
+				<pxtfl:searchField value="Pesquisar" id="searchMarca" searchProperty="descricao" controller="#{produtoBean.searchMarca}" modalTitle="Marca" disabledOn="#{produtoBean.disabledOnDefault}" width="95%"
 				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
 					<ui:define name="filtros">
 						<pxt:panelGrid columnsWidth="10%;90%">
@@ -61,19 +61,24 @@
 				</pxtfl:searchField>
 				
 				
-				<pxtfl:searchField value="Pesquisar" id="searchFornecedor" searchProperty="descricao" controller="#{produtoBean.searchFornecedor}" modalTitle="Fornecedor"
+				<pxtfl:searchField value="Pesquisar" id="searchFornecedor" searchProperty="descricao" controller="#{produtoBean.searchFornecedor}" modalTitle="Fornecedor" disabledOn="#{produtoBean.disabledOnDefault}" width="95%"
 				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
 					<ui:define name="filtros">
 						<pxt:panelGrid columnsWidth="10%;90%">
 						
 							<h:outputText value="Código:" styleClass="outputText" />
-							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.codigo}" maxlength="14" style="width: 20%;">
+							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.codigo}" maxlength="14" style="width: 15%;">
 								<pxt:onlyNumber />
 							</h:inputText>
 							
 							<h:outputText value="Descrição:" styleClass="outputText" />
-							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.descricao}" maxlength="14" style="width: 30%;">
+							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.descricao}" maxlength="14" style="width: 80%;">
 								<pxt:upperCase />
+							</h:inputText>
+							
+							<h:outputText value="CNPJ:" styleClass="outputText" />
+							<h:inputText value="#{produtoBean.searchFornecedor.searchObject.cnpj}" maxlength="14" style="width: 80%;">
+								<pxt:onlyNumber />
 							</h:inputText>
 							
 						</pxt:panelGrid>
@@ -82,6 +87,7 @@
 					<ui:define name="colunas">
 						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
 						<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+						<pxtfl:column headerValue="CNPJ" value="#{obj.cnpj}" columnWidth="10%" />
 					</ui:define>
 				</pxtfl:searchField>
 				

@@ -12,10 +12,10 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;30%;15%;" width="60%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;25%;15%;" width="45%">
 			
 				<h:outputLabel value="Código" styleClass="outputText" />
-				<h:outputLabel value="Descrição" styleClass="outputText" />
+				<h:outputLabel value="Nome" styleClass="outputText" />
 				<h:outputLabel value="CNPJ" styleClass="outputText" />
 				
 				<h:inputText value="#{fornecedorBean.domain.codigo}" style="width:95%" disabled="#{fornecedorBean.disabledOnInsEdi}" >
@@ -35,7 +35,7 @@
 		
 		<ui:define name="colunasTabela" columnsWidth="8%;30%;15%;">
 			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
-			<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" />
+			<pxtfl:column headerValue="Nome" value="#{obj.descricao}" />
 			<pxtfl:column headerValue="CNPJ" value="#{obj.cnpj}" />
 		</ui:define>		
 	</ui:composition>
