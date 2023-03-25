@@ -16,6 +16,7 @@ import pxt.framework.persistence.PersistenceException;
 import com.pxt.loja.business.impl.EstoqueBO;
 import com.pxt.loja.business.impl.PedidoBO;
 import com.pxt.loja.domain.Cliente;
+import com.pxt.loja.domain.Filial;
 import com.pxt.loja.domain.Pedido;
 import com.pxt.loja.domain.Produto;
 
@@ -115,6 +116,10 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 		return this.searchProduto;
 	}
 	
+	public List<Filial> getTodasFiliais() {
+		return getDomain().getTodasFiliais();
+	}
+	
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getCliente() == null) {
@@ -136,7 +141,7 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 			pedidoBO.salvarPedido(getDomain());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
-			msgWarn(e.getMessage());
+			throw new CrudException(e.getMessage());
 		}
 	}
 		

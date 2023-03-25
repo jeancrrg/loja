@@ -29,6 +29,7 @@ public class PedidoBO {
 			pedidoSalvar.setCliente(pedido.getCliente());
 			pedidoSalvar.setProduto(pedido.getProduto());
 			pedidoSalvar.setQuantidade(pedido.getQuantidade());
+			pedidoSalvar.setFilial(pedido.getFilial());
 			pedidoSalvar.setData(data);
 			
 			BigDecimal precoProduto  = pedido.getProduto().getPreco();

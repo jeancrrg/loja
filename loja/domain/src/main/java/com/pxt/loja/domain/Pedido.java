@@ -3,6 +3,7 @@ package com.pxt.loja.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,16 +54,17 @@ public class Pedido implements Serializable {
 
 
 	public Pedido(Long codigo, Cliente cliente, Produto produto,
-			Integer quantidade, Date data, BigDecimal total) {
+			Integer quantidade, Filial filial, Date data, BigDecimal total) {
 		super();
 		this.codigo = codigo;
 		this.cliente = cliente;
 		this.produto = produto;
 		this.quantidade = quantidade;
+		this.filial = filial;
 		this.data = data;
 		this.total = total;
 	}
-
+	
 
 	public Long getCodigo() {
 		return codigo;
@@ -92,6 +94,17 @@ public class Pedido implements Serializable {
 		this.quantidade = quantidade;
 	}
 
+	public List<Filial> getTodasFiliais() {
+		return Filial.getTodasFiliais();
+	}
+	
+	public Filial getFilial() {
+		return filial;
+	}
+	public void setFilial(Filial filial) {
+		this.filial = filial;
+	}
+
 	public Date getData() {
 		return data;
 	}
@@ -119,7 +132,6 @@ public class Pedido implements Serializable {
 		}
 		return this.produto;
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -145,7 +157,5 @@ public class Pedido implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
 	
 }

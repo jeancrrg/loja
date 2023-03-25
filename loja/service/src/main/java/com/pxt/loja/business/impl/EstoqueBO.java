@@ -16,9 +16,7 @@ public class EstoqueBO {
 
 	@EJB
 	EstoqueDAO estoqueDAO;
-	@EJB
-	PedidoBO pedidoBO;
-	
+
 	
 	public List<Estoque> buscarEstoque(Estoque estoque) {
 		return estoqueDAO.buscarEstoque(estoque);
