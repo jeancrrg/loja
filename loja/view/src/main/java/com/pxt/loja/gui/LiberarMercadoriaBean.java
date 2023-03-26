@@ -16,6 +16,7 @@ import pxt.framework.persistence.PersistenceException;
 import com.pxt.loja.business.impl.EstoqueBO;
 import com.pxt.loja.business.impl.MovimentacaoBO;
 import com.pxt.loja.domain.Estoque;
+import com.pxt.loja.domain.Filial;
 import com.pxt.loja.domain.Operacao;
 import com.pxt.loja.domain.Produto;
 
@@ -62,6 +63,10 @@ public class LiberarMercadoriaBean extends CrudController<Estoque> {
 		this.descricaoMovimentacao = descricaoMovimentacao;
 	}
 	
+	public List<Filial> getTodasFiliais() {
+		return Filial.getTodasFiliais();
+	}
+	
 	@Override
 	protected void buscar() throws TransactionException {
 		setListagem(estoqueBO.buscarEstoque(getDomain()));
@@ -102,13 +107,16 @@ public class LiberarMercadoriaBean extends CrudController<Estoque> {
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getProduto() == null) {
-			throw new CrudException("É obrigatório preencher o produto!");
+			throw new CrudException("O produto é obrigatório!");
 		}
 		if (getDomain().getQuantidadeRecebimento() == null || getDomain().getQuantidadeRecebimento() <= 0) {
 			throw new CrudException("A quantidade não pode ser 0, negativo ou vazio!");
 		} 
 		if (getDescricaoMovimentacao() == null || getDescricaoMovimentacao().isEmpty()) {
-			throw new CrudException("É obrigatório preencher o campo de descrição!");
+			throw new CrudException("A descrição é obrigatório!");
+		}
+		if (getDomain().getFilial() == null) {
+			throw new CrudException("A filial é obrigatório!");
 		}
 		super.antesSalvar();
 	}

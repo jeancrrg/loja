@@ -29,22 +29,27 @@ public class EstoqueBO {
 	
 	
 	public void receberMercadoria(Estoque estoque) throws PersistenceException {
-		try {
-			List<Estoque> estoqueAtual = estoqueDAO.buscarEstoque(estoque);
-			Estoque estoqueSalvar;
-			
-			if (estoqueAtual.isEmpty()) {
-				estoqueSalvar = new Estoque();
-					
-				estoqueSalvar.setProduto(estoque.getProduto());
-				estoqueSalvar.setQuantidadeDisponivel(0);
-				estoqueSalvar.setQuantidadeReservado(0);
-				estoqueSalvar.setQuantidadeRecebimento(estoque.getQuantidadeRecebimento());
-			
-			} else {
-				estoqueSalvar = estoqueAtual.get(0);
-				estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + estoque.getQuantidadeRecebimento());
+		List<Estoque> estoqueAtual = estoqueDAO.buscarEstoque(estoque);
+		Estoque estoqueSalvar;
+
+		if (estoqueAtual.isEmpty()) {
+			estoqueSalvar = new Estoque();
+
+			estoqueSalvar.setProduto(estoque.getProduto());
+			estoqueSalvar.setQuantidadeDisponivel(0);
+			estoqueSalvar.setQuantidadeReservado(0);
+			estoqueSalvar.setQuantidadeRecebimento(estoque.getQuantidadeRecebimento());
+			estoqueSalvar.setFilial(estoque.getFilial());
+
+		} else {
+			estoqueSalvar = estoqueAtual.get(0);
+
+			if (estoque.getFilial() != estoqueSalvar.getFilial() && estoqueSalvar.getQuantidadeRecebimento() > 0) {
+				throw new PersistenceException("Não é possível realizar o recebimento para outra filial pois ainda existe estoque de recebimento na filial: " + estoqueSalvar.getFilial());
 			}
+			estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + estoque.getQuantidadeRecebimento());
+		}
+		try {
 			estoqueDAO.saveOrUpdate(estoqueSalvar);
 		} catch (PersistenceException e) {
 			throw new PersistenceException("ERRO: Não foi possível salvar o estoque de recebimento!", e);
@@ -53,19 +58,22 @@ public class EstoqueBO {
 	
 	
 	public void liberarMercadoria(Estoque estoque) throws PersistenceException {
-			List<Estoque> listaEstoque = estoqueDAO.buscarEstoque(estoque);
-			Estoque estoqueAtual = new Estoque();
-			
-			if (listaEstoque.isEmpty()) {
-				throw new PersistenceException("Produto não encontrado no estoque!");
-			} else {
-				estoqueAtual = listaEstoque.get(0);
-			}
-			if (estoque.getQuantidadeRecebimento() > estoqueAtual.getQuantidadeRecebimento()) {
-				throw new PersistenceException("Não é possível realizar a movimentação dessa quantidade! Quantidade em recebimento: " + estoqueAtual.getQuantidadeRecebimento());
-			}
-			estoqueAtual.setQuantidadeDisponivel(estoqueAtual.getQuantidadeDisponivel() + estoque.getQuantidadeRecebimento());
-			estoqueAtual.setQuantidadeRecebimento(estoqueAtual.getQuantidadeRecebimento() - estoque.getQuantidadeRecebimento());
+		List<Estoque> listaEstoque = estoqueDAO.buscarEstoque(estoque);
+		Estoque estoqueAtual = new Estoque();
+		
+		if (listaEstoque.isEmpty()) {
+			throw new PersistenceException("Produto não encontrado no estoque!");
+		} else {
+			estoqueAtual = listaEstoque.get(0);
+		}
+		if (estoque.getQuantidadeRecebimento() > estoqueAtual.getQuantidadeRecebimento()) {
+			throw new PersistenceException("Não é possível realizar a liberação dessa quantidade! Quantidade em recebimento: " + estoqueAtual.getQuantidadeRecebimento());
+		}
+		if (estoque.getFilial() != estoqueAtual.getFilial() && estoqueAtual.getQuantidadeRecebimento() > 0) {
+			throw new PersistenceException("Não é possível realizar a liberação para outra filial pois ainda existe estoque de recebimento na filial: " + estoqueAtual.getFilial());
+		}
+		estoqueAtual.setQuantidadeDisponivel(estoqueAtual.getQuantidadeDisponivel() + estoque.getQuantidadeRecebimento());
+		estoqueAtual.setQuantidadeRecebimento(estoqueAtual.getQuantidadeRecebimento() - estoque.getQuantidadeRecebimento());
 			
 		try {
 			estoqueDAO.saveOrUpdate(estoqueAtual);
@@ -75,7 +83,7 @@ public class EstoqueBO {
 	}
 	
 	
-	public void reservarMercadoria(Pedido pedido) throws PersistenceException {
+	public Estoque reservarMercadoria(Pedido pedido) throws PersistenceException {
 		Estoque estoqueAtual = estoqueDAO.buscarEstoquePorCodigo(pedido.getProduto().getCodigo());
 		
 		if (estoqueAtual == null) {
@@ -88,7 +96,7 @@ public class EstoqueBO {
 		estoqueAtual.setQuantidadeReservado(estoqueAtual.getQuantidadeReservado() + pedido.getQuantidade());
 		
 		try {
-			estoqueDAO.saveOrUpdate(estoqueAtual);
+			return estoqueDAO.saveOrUpdate(estoqueAtual);
 		} catch (PersistenceException e) {
 			throw new PersistenceException("ERRO: Não foi possível salvar estoque de reserva!", e);
 		}

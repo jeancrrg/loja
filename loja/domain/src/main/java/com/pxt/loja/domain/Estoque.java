@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -28,18 +30,22 @@ public class Estoque implements Serializable {
 	@Column(name = "QNTRCB")
 	private Integer quantidadeRecebimento;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DESFIL")
+	private Filial filial;
 	
 	public Estoque(){
 	}
 
 
 	public Estoque(Produto produto, Integer quantidadeDisponivel,
-			Integer quantidadeReservado, Integer quantidadeRecebimento) {
+			Integer quantidadeReservado, Integer quantidadeRecebimento, Filial filial) {
 		super();
 		this.produto = produto;
 		this.quantidadeDisponivel = quantidadeDisponivel;
 		this.quantidadeReservado = quantidadeReservado;
 		this.quantidadeRecebimento = quantidadeRecebimento;
+		this.filial = filial;
 	}
 
 
@@ -69,6 +75,13 @@ public class Estoque implements Serializable {
 	}
 	public void setQuantidadeRecebimento(Integer quantidadeRecebimento) {
 		this.quantidadeRecebimento = quantidadeRecebimento;
+	}
+
+	public Filial getFilial() {
+		return filial;
+	}
+	public void setFilial(Filial filial) {
+		this.filial = filial;
 	}
 
 	public Produto getProdutoNaoNulo() {

@@ -3,7 +3,6 @@ package com.pxt.loja.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -94,10 +93,6 @@ public class Pedido implements Serializable {
 		this.quantidade = quantidade;
 	}
 
-	public List<Filial> getTodasFiliais() {
-		return Filial.getTodasFiliais();
-	}
-	
 	public Filial getFilial() {
 		return filial;
 	}

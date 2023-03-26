@@ -14,9 +14,12 @@ import pxt.framework.faces.exception.CrudException;
 import pxt.framework.persistence.PersistenceException;
 
 import com.pxt.loja.business.impl.EstoqueBO;
+import com.pxt.loja.business.impl.MovimentacaoBO;
 import com.pxt.loja.business.impl.PedidoBO;
 import com.pxt.loja.domain.Cliente;
+import com.pxt.loja.domain.Estoque;
 import com.pxt.loja.domain.Filial;
+import com.pxt.loja.domain.Operacao;
 import com.pxt.loja.domain.Pedido;
 import com.pxt.loja.domain.Produto;
 
@@ -31,7 +34,11 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 	private EstoqueBO estoqueBO;
 	@EJB
 	private PedidoBO pedidoBO;
+	@EJB
+	private MovimentacaoBO movimentacaoBO;
+	
 	private Pedido domain;
+	private String descricaoMovimentacao;
 	private SearchFieldController<Cliente> searchCliente;
 	private SearchFieldController<Produto> searchProduto;
 	
@@ -53,7 +60,18 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 	public PersistenceService getPersistenceService() {
 		return persistenceService;
 	}
+	
+	public String getDescricaoMovimentacao() {
+		return descricaoMovimentacao;
+	}
+	public void setDescricaoMovimentacao(String descricaoMovimentacao) {
+		this.descricaoMovimentacao = descricaoMovimentacao;
+	}
 
+	public List<Filial> getTodasFiliais() {
+		return Filial.getTodasFiliais();
+	}
+	
 	@SuppressWarnings("serial")
 	public SearchFieldController<Cliente> getSearchCliente() {
 		if (this.searchCliente == null) {
@@ -116,10 +134,6 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 		return this.searchProduto;
 	}
 	
-	public List<Filial> getTodasFiliais() {
-		return getDomain().getTodasFiliais();
-	}
-	
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getCliente() == null) {
@@ -137,8 +151,9 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 	@Override
 	protected void salvar() throws CrudException, TransactionException {
 		try {
-			estoqueBO.reservarMercadoria(getDomain());
+			Estoque estoque = estoqueBO.reservarMercadoria(getDomain());
 			pedidoBO.salvarPedido(getDomain());
+			movimentacaoBO.salvarMovimentacao(estoque, descricaoMovimentacao, Operacao.RESERVA);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new CrudException(e.getMessage());

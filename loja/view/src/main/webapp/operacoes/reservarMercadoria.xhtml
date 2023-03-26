@@ -12,11 +12,12 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="20%;20%;10%;10%" width="68%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="20%;20%;10%;30%;15%" width="95%">
 			
 				<h:outputLabel value="Cliente" styleClass="outputText" />
 				<h:outputLabel value="Produto" styleClass="outputText" />
-				<h:outputLabel value="Quantidade reservada" styleClass="outputText" />
+				<h:outputLabel value="Quantidade reserva" styleClass="outputText" />
+				<h:outputLabel value="Descrição reserva" styleClass="outputText" />
 				<h:outputLabel value="Filial" styleClass="outputText" />
 				
 				
@@ -76,15 +77,18 @@
 				</pxtfl:searchField>
 				
 				
-				<h:inputText value="#{reservarMercadoriaBean.domain.quantidade}" style="width:98%" maxlength="14" disabledOn="#{reservarMercadoriaBean.disabledOnDefault}" >
+				<h:inputText value="#{reservarMercadoriaBean.domain.quantidade}" style="width:98%" maxlength="14" disabled="#{reservarMercadoriaBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
+				</h:inputText>
+				
+				<h:inputText value="#{reservarMercadoriaBean.descricaoMovimentacao}" style="width:98%" maxlength="180" disabled="#{reservarMercadoriaBean.disabledOnDefault}" >
+					<pxt:upperCase />
 				</h:inputText>
 				
 				<h:selectOneMenu value="#{reservarMercadoriaBean.domain.filial}" style="width:98%" converter="defaultConverter">
 					<f:selectItem itemLabel="" itemValue=""/>
 					<f:selectItems value="#{reservarMercadoriaBean.todasFiliais}" var="obj" itemLabel="#{obj}"/>
 				</h:selectOneMenu>
-				
 				
 			</pxt:panelGrid>
 			
