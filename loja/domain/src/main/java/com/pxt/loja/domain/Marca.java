@@ -20,19 +20,16 @@ public class Marca implements Serializable {
 	@SequenceGenerator(sequenceName = "SEQ_LJMARCA", allocationSize = 1, name = "SEQ_LJMARCA")
 	@Column(name = "CODMRC")
 	private Long codigo;
+	
 	@Column(name = "DESMRC")
-	private String descricao;
+	private String nome;	
+	 
+	public Marca() { }
 	
-	
-	public Marca() {
-	}
-
-	
-	public Marca(Long codigo, String descricao) {
+	public Marca(Long codigo, String nome) {
 		this.codigo = codigo;
-		this.descricao = descricao;
+		this.nome = nome;
 	}
-
 
 	public Long getCodigo() {
 		return codigo;
@@ -41,11 +38,15 @@ public class Marca implements Serializable {
 		this.codigo = codigo;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getNome() {
+		return nome;
 	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	
+	public void setNome(String nome) {
+		if (nome != null) {
+			nome = nome.trim();
+		}
+		this.nome = nome;
 	}
 
 	@Override
@@ -55,7 +56,6 @@ public class Marca implements Serializable {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
 	}
-	
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -76,6 +76,7 @@ public class Marca implements Serializable {
 
 	@Override
 	public String toString() {
-		return descricao;
+		return nome;
 	}
+	
 }

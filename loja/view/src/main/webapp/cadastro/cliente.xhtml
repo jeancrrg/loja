@@ -12,35 +12,35 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="8%;20%;20%;15%;10%;10%" width="100%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="5%;20%;10%;15%;10%;10%" width="80%">
 				
 				<h:outputLabel value="Código" styleClass="outputText" />
-				<h:outputLabel value="Razão Social" styleClass="outputText" />
-				<h:outputLabel value="Nome Fantasia" styleClass="outputText" />
-				<h:outputLabel value="CNPJ" styleClass="outputText" />
+				<h:outputLabel value="Nome" styleClass="outputText" />
+				<h:outputLabel value="CPF/CNPJ" styleClass="outputText" />
+				<h:outputLabel value="Email" styleClass="outputText" />
+				<h:outputLabel value="Telefone" styleClass="outputText" />
 				<pxt:cell colspan="2">
-					<h:outputText value="Data de Nascimento:" styleClass="outputText" />
+					<h:outputText value="Data de nascimento" styleClass="outputText" />
 				</pxt:cell>
 				
 				
-				<h:inputText value="#{clienteBean.domain.codigo}" style="width:95%" disabled="#{clienteBean.disabledOnInsEdi}" >
+				<h:inputText value="#{clienteBean.domain.codigo}" style="width:90%" maxlength="14" disabled="#{clienteBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.razaoSocial}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+				<h:inputText value="#{clienteBean.domain.nome}" style="width:98%" maxlength="180" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:upperCase />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.nomeFantasia}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+				<h:inputText value="#{clienteBean.domain.cpfCnpj}" style="width:95%" maxlength="14" disabled="#{clienteBean.disabledOnDefault}" >
+					<pxt:onlyNumber />
+				</h:inputText>
+				<h:inputText value="#{clienteBean.domain.email}" style="width:95%" maxlength="50" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:upperCase />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.cnpj}" style="width:95%" disabled="#{clienteBean.disabledOnDefault}" >
+				<h:inputText value="#{clienteBean.domain.telefone}" style="width:95%" maxlength="11" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				
-				<rich:calendar datePattern="dd/MM/yyyy" value="#{clienteBean.domain.dataNascimento}" inputStyle="width:75%;"	disabled="#{clienteBean.disabledOnPes}"/>
-				<h:panelGroup>
-					<h:selectBooleanCheckbox value="#{clienteBean.domain.ativo}" disabled="#{clienteBean.disabledOnDefault}" />
-					<h:outputLabel value="Ativo?"  styleClass="outputText" />
-				</h:panelGroup>
+				<rich:calendar datePattern="dd/MM/yyyy" value="#{clienteBean.domain.dataNascimento}" inputStyle="width:75%;" disabled="#{clienteBean.disabledOnPes}"/>
 				
 				
 			</pxt:panelGrid>
@@ -48,14 +48,14 @@
 		</ui:define>
 		
 		
-		<ui:define name="colunasTabela" columnsWidth="8%;20%;20%;30%;10%;10%">
+		<ui:define name="colunasTabela" columnsWidth="10%;10%;10%;10%;10%;10%">
 		
 			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
-			<pxtfl:column headerValue="Razão Social" value="#{obj.razaoSocial}" />
-			<pxtfl:column headerValue="Nome Fantasia" value="#{obj.nomeFantasia}" />
-			<pxtfl:column headerValue="CNPJ" value="#{obj.cnpj}" />
-			<pxtfl:column headerValue="Data de Nascimento " value="#{obj.dataNascimento}" />
-			<pxtfl:column headerValue="Status" value="#{obj.ativo ? 'Ativo' : 'Inativo'}" />
+			<pxtfl:column headerValue="Nome" value="#{obj.nome}" />
+			<pxtfl:column headerValue="CPF/CNPJ" value="#{obj.cpfCnpj}" />
+			<pxtfl:column headerValue="Email" value="#{obj.email}" />
+			<pxtfl:column headerValue="Telefone" value="#{obj.telefone}" />
+			<pxtfl:column headerValue="Data de Nascimento" value="#{obj.dataNascimento}" />
 			
 		</ui:define>	
 			

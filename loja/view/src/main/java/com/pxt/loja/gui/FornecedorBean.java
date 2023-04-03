@@ -6,8 +6,11 @@ import javax.faces.bean.ViewScoped;
 
 import pxt.framework.business.PersistenceService;
 import pxt.framework.faces.controller.CrudController;
+import pxt.framework.faces.controller.CrudState;
 import pxt.framework.faces.exception.CrudException;
+import pxt.framework.validation.ValidationException;
 
+import com.pxt.loja.business.impl.FornecedorBO;
 import com.pxt.loja.domain.Fornecedor;
 
 
@@ -18,6 +21,9 @@ public class FornecedorBean extends CrudController<Fornecedor>{
 	
 	@EJB
 	private PersistenceService persistenceService;
+	@EJB
+	private FornecedorBO fornecedorBO;
+	
 	private Fornecedor domain;
 	
 	
@@ -41,13 +47,16 @@ public class FornecedorBean extends CrudController<Fornecedor>{
 	
 	@Override
 	protected void antesSalvar() throws CrudException {
-		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
-			throw new CrudException("O nome é um campo obrigatório!");
+		try {
+			fornecedorBO.validarCampos(getDomain());
+		
+			if (this.getEstadoCrud() == CrudState.ST_INSERT && fornecedorBO.verificarExisteCnpj(getDomain().getCnpj())) {
+				throw new CrudException("Já possui esse fornecedor cadastrado!");
+			}
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new CrudException(e.getMessage());
 		}
-		if (getDomain().getCnpj() == null || getDomain().getCnpj().isEmpty()) {
-			throw new CrudException("O CNPJ é um campo obrigatório!");
-		}
-		super.antesSalvar();
 	}
 	
 }

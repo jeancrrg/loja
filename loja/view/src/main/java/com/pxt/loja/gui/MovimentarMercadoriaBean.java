@@ -12,41 +12,40 @@ import pxt.framework.faces.controller.CrudController;
 import pxt.framework.faces.controller.SearchFieldController;
 import pxt.framework.faces.exception.CrudException;
 import pxt.framework.persistence.PersistenceException;
+import pxt.framework.validation.ValidationException;
 
 import com.pxt.loja.business.impl.EstoqueBO;
 import com.pxt.loja.business.impl.MovimentacaoBO;
-import com.pxt.loja.domain.Estoque;
-import com.pxt.loja.domain.Filial;
+import com.pxt.loja.domain.Movimentacao;
 import com.pxt.loja.domain.Operacao;
 import com.pxt.loja.domain.Produto;
 
-
 @ManagedBean
 @ViewScoped
-public class LiberarMercadoriaBean extends CrudController<Estoque> {
+public class MovimentarMercadoriaBean extends CrudController<Movimentacao>{
 	private static final long serialVersionUID = 1L;
-	
+
 	@EJB
 	private PersistenceService persistenceService;
 	@EJB
-	private EstoqueBO estoqueBO;
-	@EJB
 	private MovimentacaoBO movimentacaoBO;
-	private Estoque domain;
-	private String descricaoMovimentacao;
+	@EJB
+	private EstoqueBO estoqueBO;
+	
+	private Movimentacao domain;
 	private SearchFieldController<Produto> searchProduto;
 	
 	
 	@Override
-	public Estoque getDomain() {
+	public Movimentacao getDomain() {
 		if (domain == null) {
-			domain = new Estoque();
+			domain = new Movimentacao();
 		}
 		return domain;
 	}
 
 	@Override
-	public void setDomain(Estoque domain) {
+	public void setDomain(Movimentacao domain) {
 		this.domain = domain;
 	}
 
@@ -55,23 +54,10 @@ public class LiberarMercadoriaBean extends CrudController<Estoque> {
 		return persistenceService;
 	}
 
-	public String getDescricaoMovimentacao() {
-		return descricaoMovimentacao;
-	}
-
-	public void setDescricaoMovimentacao(String descricaoMovimentacao) {
-		this.descricaoMovimentacao = descricaoMovimentacao;
+	public List<Operacao> getOperacoesMovimentacao() {
+		return Operacao.getOperacoesMovimentacao();
 	}
 	
-	public List<Filial> getTodasFiliais() {
-		return Filial.getTodasFiliais();
-	}
-	
-	@Override
-	protected void buscar() throws TransactionException {
-		setListagem(estoqueBO.buscarEstoque(getDomain()));
-	}
-
 	@SuppressWarnings("serial")
 	public SearchFieldController<Produto> getSearchProduto() {
 		if (this.searchProduto == null) {
@@ -103,33 +89,26 @@ public class LiberarMercadoriaBean extends CrudController<Estoque> {
 		return this.searchProduto;
 	}
 	
-	
 	@Override
 	protected void antesSalvar() throws CrudException {
-		if (getDomain().getProduto() == null) {
-			throw new CrudException("O produto é obrigatório!");
+		try {
+			movimentacaoBO.validarCampos(getDomain());
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new CrudException(e.getMessage());
 		}
-		if (getDomain().getQuantidadeRecebimento() == null || getDomain().getQuantidadeRecebimento() <= 0) {
-			throw new CrudException("A quantidade não pode ser 0, negativo ou vazio!");
-		} 
-		if (getDescricaoMovimentacao() == null || getDescricaoMovimentacao().isEmpty()) {
-			throw new CrudException("A descrição é obrigatório!");
-		}
-		if (getDomain().getFilial() == null) {
-			throw new CrudException("A filial é obrigatório!");
-		}
-		super.antesSalvar();
 	}
 	
 	@Override
 	protected void salvar() throws CrudException, TransactionException {
 		try {
-			estoqueBO.liberarMercadoria(getDomain());
-			movimentacaoBO.salvarMovimentacao(getDomain(), descricaoMovimentacao, Operacao.LIBERACAO);
+			movimentacaoBO.salvar(getDomain());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new CrudException(e.getMessage());
-		} 
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new CrudException(e.getMessage());
+		}
 	}
-	
 }

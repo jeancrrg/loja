@@ -1,79 +1,66 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:pxt="http://www.peixoto.com.br/pxtFaces"
-	xmlns:pxtfl="http://www.peixoto.com.br/jsf"
-	xmlns:pxtfc="http://www.peixoto.com.br/jsf/core">
-	<ui:composition template="/META-INF/facelets/templates/search.xhtml" xmlns:pxtcc="http://java.sun.com/jsf/composite/peixoto">
-		<ui:param name="form_id" value="formEstoque" />
-		<ui:param name="backingBean" value="#{estoqueBean}" />
-		<ui:param name="titulo" value="Consulta estoque" />
-		<ui:param name="tituloPanelFiltro" value="Filtros" />
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:pxt="http://www.peixoto.com.br/pxtFaces"
+	xmlns:pxtfl="http://www.peixoto.com.br/jsf" xmlns:pxtfc="http://www.peixoto.com.br/jsf/core" xmlns:pxtcc="http://java.sun.com/jsf/composite/peixoto">
 	
-		<ui:define name="css">
-			<style type="text/css">
-				.ajusta_panel {
-					padding: 0px;
-				}
-			</style>
-		</ui:define>
-		
-		<ui:define name="btnFind">
-			<a4j:commandButton value="Pesquisar" style="background:transparent url(#{facesContext.externalContext.requestContextPath}/faces/javax.faces.resource/pesquisar_16x16.png?ln=pxt.framework.faces.img) no-repeat center left; width: 100px;"
-			actionListener="#{estoqueBean.busca}" render="tableLog,mensagemGeral,messagePane,dataGrid,chart"/>
-		</ui:define>
-		
-		<ui:define name="panelFiltro">
+<ui:composition template="/META-INF/facelets/templates/search.xhtml">
+	<ui:param name="form_id" value="formEstoque" />
+	<ui:param name="backingBean" value="#{estoqueBean}" />
+	<ui:param name="titulo" value="Consulta estoque" />
+	
+	<ui:define name="css">
+		<style type="text/css">
+			.ajusta_panel {
+				padding: 0px;
+			}
+		</style>
+	</ui:define>
+	
+	<ui:define name="panelFiltro">
+	
+		<pxt:panelGrid columnsWidth="20%" width="20%">
+			<h:outputText value="Produto" styleClass="outputText"/>
 			
-			<pxt:panelGrid columnsWidth="30%" width="30%">
 			
-				<h:outputText value="Produto:" styleClass="outputText" />
-				
-				
-				<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{estoqueBean.searchProduto}" modalTitle="Produto" width="95%"
-				render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
-					<ui:define name="filtros">
-						<pxt:panelGrid columnsWidth="10%;90%">
+			<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{estoqueBean.searchProduto}" modalTitle="Produto" width="98%"
+			render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+				<ui:define name="filtros">
+					<pxt:panelGrid columnsWidth="10%;90%">
+							
+						<h:outputText value="Código" styleClass="outputText" />
+						<h:inputText value="#{estoqueBean.searchProduto.searchObject.codigo}" maxlength="8" style="width: 10%;">
+							<pxt:onlyNumber />
+						</h:inputText>
+									
+						<h:outputText value="Descrição" styleClass="outputText" />
+						<h:inputText value="#{estoqueBean.searchProduto.searchObject.descricao}" maxlength="180" style="width: 30%;">
+							<pxt:upperCase />
+						</h:inputText>
+									
+					</pxt:panelGrid>
+				</ui:define>		
 						
-							<h:outputText value="Código:" styleClass="outputText" />
-							<h:inputText value="#{estoqueBean.searchProduto.searchObject.codigo}" maxlength="14" style="width: 20%;">
-								<pxt:onlyNumber />
-							</h:inputText>
-							
-							<h:outputText value="Descrição:" styleClass="outputText" />
-							<h:inputText value="#{estoqueBean.searchProduto.searchObject.descricao}" maxlength="14" style="width: 30%;">
-								<pxt:upperCase />
-							</h:inputText>
-							
-						</pxt:panelGrid>
-					</ui:define>
-					
-					<ui:define name="colunas">
-						<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
-						<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
-					</ui:define>
-				</pxtfl:searchField>
-				
-				
-			</pxt:panelGrid>
+				<ui:define name="colunas">
+					<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+					<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+				</ui:define>
+			</pxtfl:searchField>
+
+		</pxt:panelGrid>
 		
-		</ui:define>
+	</ui:define>
+
+	<ui:define name="colunasTabela">
+	
+		<pxtfl:column headerValue="Produto" value="#{obj.produto.descricao}"/>
+		<pxtfl:column headerValue="Quantidade recebimento" value="#{obj.quantidadeRecebimento}"/>
+		<pxtfl:column headerValue="Quantidade disponível" value="#{obj.quantidadeDisponivel}"/>
+		<pxtfl:column headerValue="Quantidade reservado" value="#{obj.quantidadeReservado}"/>
+		<pxtfl:column headerValue="Status" value="#{obj.produto.ativo ? 'Ativo' : 'Inativo'}" />
 		
-		
-		<ui:define name="colunasTabela" columnsWidth="25%;8%;8%;8%;10%">
-				<pxtfl:column headerValue="Produto" value="#{obj.produto}" />
-				<pxtfl:column headerValue="Quantidade Disponivel" value="#{obj.quantidadeDisponivel}" />
-				<pxtfl:column headerValue="Quantidade Recebimento" value="#{obj.quantidadeRecebimento}" />
-				<pxtfl:column headerValue="Quantidade Reservada" value="#{obj.quantidadeReservado}" />
-				<pxtfl:column headerValue="Ativo" value="#{obj.produto.ativo}" />
-		</ui:define>
-		
-	</ui:composition>
+	</ui:define>
+	
+</ui:composition>
 </html>

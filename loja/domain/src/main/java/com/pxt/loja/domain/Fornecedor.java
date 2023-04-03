@@ -20,20 +20,32 @@ public class Fornecedor implements Serializable {
 	@SequenceGenerator(sequenceName = "SEQ_LJMARCA", allocationSize = 1, name = "SEQ_LJMARCA")
 	@Column(name = "CODFRN")
 	private Long codigo;
+	
 	@Column(name = "DESFRN")
-	private String descricao;
+	private String nome;
+	
 	@Column(name = "NUMCNPJ")
 	private String cnpj;
+	
+	@Column(name = "NUMTEL")
+	private String telefone;
+	
+	@Column(name = "DESEMA")
+	private String email;
 	
 	
 	public Fornecedor() {
 	}
 
 	
-	public Fornecedor(Long codigo, String descricao, String cnpj) {
+	public Fornecedor(Long codigo, String nome, String cnpj, String telefone,
+			String email) {
+		super();
 		this.codigo = codigo;
-		this.descricao = descricao;
+		this.nome = nome;
 		this.cnpj = cnpj;
+		this.telefone = telefone;
+		this.email = email;
 	}
 
 	
@@ -44,18 +56,44 @@ public class Fornecedor implements Serializable {
 		this.codigo = codigo;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getNome() {
+		return nome;
 	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setNome(String nome) {
+		if (nome != null) {
+			nome = nome.trim();
+		}
+		this.nome = nome;
 	}
 
 	public String getCnpj() {
 		return cnpj;
 	}
 	public void setCnpj(String cnpj) {
+		if (cnpj != null) {
+			cnpj = cnpj.replaceAll("[.()'/-]", "").replace(" ", "");
+		}
 		this.cnpj = cnpj;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(String telefone) {
+		if (telefone != null) {
+			telefone = telefone.replaceAll("[.()'/-]", "").replace(" ", "");
+		}
+		this.telefone = telefone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		if (email != null) {
+			email = email.replaceAll("[()'/-]", "").replace(" ", "");
+		}
+		this.email = email;
 	}
 
 	@Override
@@ -85,6 +123,7 @@ public class Fornecedor implements Serializable {
 
 	@Override
 	public String toString() {
-		return descricao;
+		return nome;
 	}
+	
 }

@@ -6,84 +6,102 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import pxt.framework.persistence.PersistenceException;
+import pxt.framework.validation.ValidationException;
 
 import com.pxt.loja.domain.Estoque;
-import com.pxt.loja.domain.Pedido;
+import com.pxt.loja.domain.Operacao;
+import com.pxt.loja.domain.Produto;
 import com.pxt.loja.persistence.dao.EstoqueDAO;
 
 @Stateless
 public class EstoqueBO {
 
 	@EJB
-	EstoqueDAO estoqueDAO;
+	private EstoqueDAO estoqueDAO;
 
 	
-	public List<Estoque> buscarEstoque(Estoque estoque) {
+	public List<Estoque> buscarEstoque(Estoque estoque) throws PersistenceException {
 		return estoqueDAO.buscarEstoque(estoque);
 	}
 	
-	
-	public Estoque buscarEstoquePorCodigo(Long codigo) throws PersistenceException {
-		return estoqueDAO.buscarEstoquePorCodigo(codigo);
+	public void validarCampos(Estoque estoque) throws ValidationException {
+		if (estoque.getProduto() == null) {
+			throw new ValidationException("O produto é obrigatório!");
+		}
 	}
 	
-	
-	public void receberMercadoria(Estoque estoque) throws PersistenceException {
-		List<Estoque> estoqueAtual = estoqueDAO.buscarEstoque(estoque);
-		Estoque estoqueSalvar;
-
-		if (estoqueAtual.isEmpty()) {
-			estoqueSalvar = new Estoque();
-
-			estoqueSalvar.setProduto(estoque.getProduto());
-			estoqueSalvar.setQuantidadeDisponivel(0);
-			estoqueSalvar.setQuantidadeReservado(0);
-			estoqueSalvar.setQuantidadeRecebimento(estoque.getQuantidadeRecebimento());
-			estoqueSalvar.setFilial(estoque.getFilial());
-
-		} else {
-			estoqueSalvar = estoqueAtual.get(0);
-
-			if (estoque.getFilial() != estoqueSalvar.getFilial() && estoqueSalvar.getQuantidadeRecebimento() > 0) {
-				throw new PersistenceException("Não é possível realizar o recebimento para outra filial pois ainda existe estoque de recebimento na filial: " + estoqueSalvar.getFilial());
+	public void validarEstoque(Estoque estoque, Integer quantidade, String tipoEstoque) throws ValidationException {
+		if (tipoEstoque.equals("RECEBIMENTO")) {
+			if (quantidade > estoque.getQuantidadeRecebimento()) {
+				throw new ValidationException("Não é possível realizar a operação dessa quantidade! Quantidade em recebimento: " + estoque.getQuantidadeRecebimento());
 			}
-			estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + estoque.getQuantidadeRecebimento());
-		}
-		try {
-			estoqueDAO.saveOrUpdate(estoqueSalvar);
-		} catch (PersistenceException e) {
-			throw new PersistenceException("ERRO: Não foi possível salvar o estoque de recebimento!", e);
+		} else if (tipoEstoque.equals("DISPONIVEL")) {
+			if (quantidade > estoque.getQuantidadeDisponivel()) {
+				throw new ValidationException("Não é possível realizar a operação dessa quantidade! Quantidade disponível: " + estoque.getQuantidadeDisponivel());
+			}
+		} else if (tipoEstoque.equals("RESERVADO")) {
+			if (quantidade > estoque.getQuantidadeReservado()) {
+				throw new ValidationException("Não é possível realizar a operação dessa quantidade! Quantidade reservado: " + estoque.getQuantidadeReservado());
+			}
 		}
 	}
 	
 	
-	public void liberarMercadoria(Estoque estoque) throws PersistenceException {
-		List<Estoque> listaEstoque = estoqueDAO.buscarEstoque(estoque);
-		Estoque estoqueAtual = new Estoque();
-		
-		if (listaEstoque.isEmpty()) {
-			throw new PersistenceException("Produto não encontrado no estoque!");
-		} else {
-			estoqueAtual = listaEstoque.get(0);
-		}
-		if (estoque.getQuantidadeRecebimento() > estoqueAtual.getQuantidadeRecebimento()) {
-			throw new PersistenceException("Não é possível realizar a liberação dessa quantidade! Quantidade em recebimento: " + estoqueAtual.getQuantidadeRecebimento());
-		}
-		if (estoque.getFilial() != estoqueAtual.getFilial() && estoqueAtual.getQuantidadeRecebimento() > 0) {
-			throw new PersistenceException("Não é possível realizar a liberação para outra filial pois ainda existe estoque de recebimento na filial: " + estoqueAtual.getFilial());
-		}
-		estoqueAtual.setQuantidadeDisponivel(estoqueAtual.getQuantidadeDisponivel() + estoque.getQuantidadeRecebimento());
-		estoqueAtual.setQuantidadeRecebimento(estoqueAtual.getQuantidadeRecebimento() - estoque.getQuantidadeRecebimento());
+	public void salvar(Produto produto, Integer quantidade, Operacao operacao) throws PersistenceException, ValidationException {
+		try {
+			Estoque estoqueAtual = estoqueDAO.buscarEstoquePorCodigoProduto(produto.getCodigo());
+			Estoque estoqueSalvar = new Estoque();
 			
-		try {
-			estoqueDAO.saveOrUpdate(estoqueAtual);
+			if (operacao.equals(Operacao.RECEBIMENTO)) {
+				if (estoqueAtual == null) {
+					estoqueSalvar.setProduto(produto);
+					estoqueSalvar.setQuantidadeDisponivel(0);
+					estoqueSalvar.setQuantidadeReservado(0);
+					estoqueSalvar.setQuantidadeRecebimento(quantidade);
+				} else {
+					estoqueSalvar = estoqueAtual;
+					estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + quantidade);
+				}
+			} else {
+				if (estoqueAtual == null) {
+					throw new ValidationException("Produto não encontrado no estoque!");
+				} 
+				estoqueSalvar = estoqueAtual;
+				
+				if (operacao.equals(Operacao.LIBERACAO)) {
+					validarEstoque(estoqueSalvar, quantidade, "RECEBIMENTO");
+					estoqueSalvar.setQuantidadeDisponivel(estoqueSalvar.getQuantidadeDisponivel() + quantidade);
+					estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() - quantidade);
+				}
+				if (operacao.equals(Operacao.DEVOLUCAO)) {
+					estoqueSalvar.setQuantidadeDisponivel(estoqueSalvar.getQuantidadeDisponivel() + quantidade);
+				}   
+				if (operacao.equals(Operacao.DESCARTE)) {
+					validarEstoque(estoqueSalvar, quantidade, "DISPONIVEL");
+					estoqueSalvar.setQuantidadeDisponivel(estoqueSalvar.getQuantidadeDisponivel() - quantidade);
+				}
+				if (operacao.equals(Operacao.AJUSTE_RECEBIMENTO)) {
+					estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() - quantidade);
+				}
+				if (operacao.equals(Operacao.AJUSTE_LIBERACAO)) {
+					estoqueSalvar.setQuantidadeDisponivel(estoqueSalvar.getQuantidadeDisponivel() - quantidade);
+					estoqueSalvar.setQuantidadeRecebimento(estoqueSalvar.getQuantidadeRecebimento() + quantidade);
+				}
+				if (operacao.equals(Operacao.AJUSTE_RESERVA)) {
+					estoqueSalvar.setQuantidadeReservado(estoqueSalvar.getQuantidadeReservado() - quantidade);
+					estoqueSalvar.setQuantidadeDisponivel(estoqueSalvar.getQuantidadeDisponivel() + quantidade);
+				}
+			}
+			estoqueDAO.saveOrUpdate(estoqueSalvar);
+				
 		} catch (PersistenceException e) {
-			throw new PersistenceException("Não foi possível salvar estoque de liberação!", e);
+			e.printStackTrace();
+			throw new PersistenceException("Não foi possível salvar o estoque!");
 		}
 	}
 	
 	
-	public Estoque reservarMercadoria(Pedido pedido) throws PersistenceException {
+	/*/public void reservarMercadoria(Pedido pedido) throws PersistenceException {
 		Estoque estoqueAtual = estoqueDAO.buscarEstoquePorCodigo(pedido.getProduto().getCodigo());
 		
 		if (estoqueAtual == null) {
@@ -96,10 +114,10 @@ public class EstoqueBO {
 		estoqueAtual.setQuantidadeReservado(estoqueAtual.getQuantidadeReservado() + pedido.getQuantidade());
 		
 		try {
-			return estoqueDAO.saveOrUpdate(estoqueAtual);
+			estoqueDAO.saveOrUpdate(estoqueAtual);
 		} catch (PersistenceException e) {
 			throw new PersistenceException("ERRO: Não foi possível salvar estoque de reserva!", e);
 		}
-	}
+	}/*/
 	
 }

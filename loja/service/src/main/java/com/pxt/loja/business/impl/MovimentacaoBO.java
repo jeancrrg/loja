@@ -4,14 +4,11 @@ import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 
 import pxt.framework.persistence.PersistenceException;
+import pxt.framework.validation.ValidationException;
 
-import com.pxt.loja.domain.Estoque;
 import com.pxt.loja.domain.Movimentacao;
-import com.pxt.loja.domain.Operacao;
 import com.pxt.loja.persistence.dao.MovimentacaoDAO;
 
 @Stateless
@@ -19,24 +16,34 @@ public class MovimentacaoBO {
 
 	@EJB
 	private MovimentacaoDAO movimentacaoDAO;
+	@EJB
+	private EstoqueBO estoqueBO;
 	
 	
-	public void salvarMovimentacao(Estoque estoque, String descricaoMovimentacao, Operacao operacao) throws PersistenceException {
+	public void validarCampos(Movimentacao movimentacao) throws ValidationException {
+		if (movimentacao.getDescricao() == null || movimentacao.getDescricao().isEmpty()) {
+			throw new ValidationException("A descrição é um campo obrigatório!");
+		}
+		if (movimentacao.getProduto() == null) {
+			throw new ValidationException("O produto é um campo obrigatório!");
+		}
+		if (movimentacao.getOperacao() == null) {
+			throw new ValidationException("A operação é um campo obrigatório!");
+		}
+		if (movimentacao.getQuantidade() == null || movimentacao.getQuantidade() <= 0) {
+			throw new ValidationException("A quantidade não pode ser 0, negativo ou vazio!");
+		}
+	}
+
+	
+	public void salvar(Movimentacao movimentacao) throws PersistenceException, ValidationException {
 		try {
-			Movimentacao movimentacao = new Movimentacao();
-			Date data = new Date();
-			
-			movimentacao.setData(data);
-			movimentacao.setQuantidade(estoque.getQuantidadeRecebimento());
-			movimentacao.setProduto(estoque.getProduto());
-			movimentacao.setOperacao(operacao);
-			movimentacao.setDescricao(descricaoMovimentacao);
-		
+			estoqueBO.salvar(movimentacao.getProduto(), movimentacao.getQuantidade(), movimentacao.getOperacao());
+			movimentacao.setData(new Date());
 			movimentacaoDAO.save(movimentacao);
 		} catch (PersistenceException e) {
 			throw new PersistenceException("ERRO: Não foi possível salvar a movimentação! ", e);
 		}
-		
 	}
 	
 }

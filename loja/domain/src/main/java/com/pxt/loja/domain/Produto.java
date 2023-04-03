@@ -23,10 +23,15 @@ public class Produto implements Serializable {
 	@SequenceGenerator(sequenceName = "SEQ_LJPRODUTO", allocationSize = 1, name = "SEQ_LJPRODUTO")
 	@Column(name = "CODPROD")
 	private Long codigo;
+	
 	@Column(name = "DESPROD")
 	private String descricao;
-	@Column(name = "PREPROD")
-	private BigDecimal preco;
+	
+	@Column(name = "NUMTAM")
+	private String tamanho;
+	
+	@Column(name = "DESMOD")
+	private String modelo;
 	
 	@ManyToOne
 	@JoinColumn(name = "CODMRC", referencedColumnName = "CODMRC")
@@ -36,6 +41,9 @@ public class Produto implements Serializable {
 	@JoinColumn(name = "CODFRN", referencedColumnName = "CODFRN")
 	private Fornecedor fornecedor;
 	
+	@Column(name = "VLRPROD")
+	private BigDecimal preco;
+	
 	@Column(name = "INDATV")
 	private boolean ativo = true;
 	
@@ -44,17 +52,21 @@ public class Produto implements Serializable {
 	}
 
 
-	public Produto(Long codigo, String descricao, BigDecimal preco,
-			Marca marca, Fornecedor fornecedor) {
+	public Produto(Long codigo, String descricao, String tamanho,
+			String modelo, Marca marca, Fornecedor fornecedor,
+			BigDecimal preco, boolean ativo) {
+		super();
 		this.codigo = codigo;
 		this.descricao = descricao;
-		this.preco = preco;
+		this.tamanho = tamanho;
+		this.modelo = modelo;
 		this.marca = marca;
 		this.fornecedor = fornecedor;
-		this.ativo = true;
+		this.preco = preco;
+		this.ativo = ativo;
 	}
 
-
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -66,14 +78,27 @@ public class Produto implements Serializable {
 		return descricao;
 	}
 	public void setDescricao(String descricao) {
+		if (descricao != null) {
+			descricao = descricao.replaceAll("[.()'-,]", "").trim();
+		}
 		this.descricao = descricao;
 	}
 
-	public BigDecimal getPreco() {
-		return preco;
+	public String getTamanho() {
+		return tamanho;
 	}
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
+	public void setTamanho(String tamanho) {
+		this.tamanho = tamanho;
+	}
+
+	public String getModelo() {
+		return modelo;
+	}
+	public void setModelo(String modelo) {
+		if (modelo != null) {
+			modelo = modelo.replaceAll("[.()'-,]", "").trim();
+		}
+		this.modelo = modelo;
 	}
 
 	public Marca getMarca() {
@@ -90,6 +115,13 @@ public class Produto implements Serializable {
 		this.fornecedor = fornecedor;
 	}
 
+	public BigDecimal getPreco() {
+		return preco;
+	}
+	public void setPreco(BigDecimal preco) {
+		this.preco = preco;
+	}
+
 	public boolean isAtivo() {
 		return ativo;
 	}
@@ -97,8 +129,6 @@ public class Produto implements Serializable {
 		this.ativo = ativo;
 	}
 
-	
-	//Médoto para pegar a marca não nulo para usar no xhtml
 	public Marca getMarcaNaoNulo() {
 		if (marca == null) {
 			return new Marca();
@@ -106,15 +136,12 @@ public class Produto implements Serializable {
 		return this.marca;
 	}
 	
-	
-	//Médoto para pegar o fornecedor não nulo para usar no xhtml
 	public Fornecedor getFornecedorNaoNulo() {
 		if (fornecedor == null) {
 			return new Fornecedor();
 		}
 		return this.fornecedor;
 	}
-	
 	
 	@Override
 	public int hashCode() {
@@ -141,9 +168,9 @@ public class Produto implements Serializable {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return descricao;
 	}
+	
 }

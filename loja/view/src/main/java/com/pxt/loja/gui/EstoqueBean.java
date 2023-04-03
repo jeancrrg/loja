@@ -9,7 +9,10 @@ import javax.faces.bean.ViewScoped;
 import pxt.framework.business.PersistenceService;
 import pxt.framework.faces.controller.SearchController;
 import pxt.framework.faces.controller.SearchFieldController;
+import pxt.framework.persistence.PersistenceException;
+import pxt.framework.validation.ValidationException;
 
+import com.pxt.loja.business.impl.EstoqueBO;
 import com.pxt.loja.domain.Estoque;
 import com.pxt.loja.domain.Produto;
 
@@ -20,11 +23,16 @@ public class EstoqueBean extends SearchController<Estoque>{
 
 	@EJB
 	private PersistenceService persistenceService;
+	@EJB
+	private EstoqueBO estoqueBO;
+	
 	private Estoque domain;
 	private SearchFieldController<Produto> searchProduto;
 	
-	
 	public Estoque getDomain() {
+		if (domain == null) {
+			domain = new Estoque();
+		}
 		return domain;
 	}
 
@@ -34,6 +42,26 @@ public class EstoqueBean extends SearchController<Estoque>{
 
 	public PersistenceService getPersistenceService() {
 		return persistenceService;
+	}
+	
+	@Override
+	protected void busca() {
+		try {
+			estoqueBO.validarCampos(getDomain());
+			List<Estoque> listaEstoque = estoqueBO.buscarEstoque(getDomain());
+			if (listaEstoque.isEmpty()) {
+				this.msgWarn("Nenhum produto encontrado no estoque!");
+			}
+			this.setListagem(listaEstoque);
+			
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			this.msgWarn(e.getMessage());
+			
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			this.msgError(e, e.getMessage());
+		}
 	}
 	
 	@SuppressWarnings("serial")
@@ -54,7 +82,6 @@ public class EstoqueBean extends SearchController<Estoque>{
 				@Override
 				public void buscar() throws Exception {
 					setResultList((List<Produto>) persistenceService.findByExample(((Produto) getSearchObject())));
-					super.buscar();
 				}
 				
 				@Override
@@ -66,6 +93,5 @@ public class EstoqueBean extends SearchController<Estoque>{
 		}
 		return this.searchProduto;
 	}
-	
 	
 }

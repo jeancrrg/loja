@@ -6,8 +6,11 @@ import javax.faces.bean.ViewScoped;
 
 import pxt.framework.business.PersistenceService;
 import pxt.framework.faces.controller.CrudController;
+import pxt.framework.faces.controller.CrudState;
 import pxt.framework.faces.exception.CrudException;
+import pxt.framework.validation.ValidationException;
 
+import com.pxt.loja.business.impl.ClienteBO;
 import com.pxt.loja.domain.Cliente;
 
 @ManagedBean
@@ -17,6 +20,9 @@ public class ClienteBean extends CrudController<Cliente> {
 
 	@EJB
 	private PersistenceService persistenceService;
+	@EJB
+	private ClienteBO clienteBO;
+	
 	private Cliente domain;
 	
 	
@@ -40,19 +46,16 @@ public class ClienteBean extends CrudController<Cliente> {
 
 	@Override
 	protected void antesSalvar() throws CrudException {
-		if (getDomain().getRazaoSocial() == null || getDomain().getRazaoSocial().isEmpty()) {
-			throw new CrudException("A razão social é um campo obrigatório!");
+		try {
+			clienteBO.validarCadastro(getDomain());
+			
+			if (this.getEstadoCrud() == CrudState.ST_INSERT && clienteBO.verificarCpfCnpj(getDomain().getCpfCnpj())) {
+				throw new CrudException("Já possui esse cliente cadastrado!");
+			}
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new CrudException(e.getMessage());
 		}
-		if (getDomain().getNomeFantasia() == null || getDomain().getNomeFantasia().isEmpty()) {
-			throw new CrudException("O nome fantasia é um campo obrigatório!");
-		}
-		if (getDomain().getCnpj() == null || getDomain().getCnpj().isEmpty()) {
-			throw new CrudException("O CNPJ é um campo obrigatório!");
-		}
-		if (getDomain().getDataNascimento() == null) {
-			throw new CrudException("A data de nascimento é um campo obrigatório!");
-		}
-		super.antesSalvar();
 	}
 	
 }

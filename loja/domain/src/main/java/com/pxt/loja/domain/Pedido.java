@@ -1,13 +1,10 @@
 package com.pxt.loja.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,52 +21,34 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LJPEDIDO")
 	@SequenceGenerator(sequenceName = "SEQ_LJPEDIDO", allocationSize = 1, name = "SEQ_LJPEDIDO")
-	@Column(name = "CODPED")
-	private Long codigo;
+	@Column(name = "NUMPED")
+	private Long numero;
 	
 	@ManyToOne
 	@JoinColumn(name = "CODCLI", referencedColumnName = "CODCLI")
 	private Cliente cliente;
 	
-	@ManyToOne
-	@JoinColumn(name = "CODPROD", referencedColumnName = "CODPROD")
-	private Produto produto;
-	@Column(name = "QNTPROD")
-	private Integer quantidade;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "DESFIL")
-	private Filial filial;
-	
 	@Column(name = "DATPED")
 	private Date data;
-	@Column(name = "TOTPED")
-	private BigDecimal total;
 	
 	
 	public Pedido() {
-		
 	}
 
 
-	public Pedido(Long codigo, Cliente cliente, Produto produto,
-			Integer quantidade, Filial filial, Date data, BigDecimal total) {
+	public Pedido(Long numero, Cliente cliente, Date data) {
 		super();
-		this.codigo = codigo;
+		this.numero = numero;
 		this.cliente = cliente;
-		this.produto = produto;
-		this.quantidade = quantidade;
-		this.filial = filial;
 		this.data = data;
-		this.total = total;
 	}
-	
 
-	public Long getCodigo() {
-		return codigo;
+
+	public Long getNumero() {
+		return numero;
 	}
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
+	public void setNumero(Long numero) {
+		this.numero = numero;
 	}
 
 	public Cliente getCliente() {
@@ -79,27 +58,6 @@ public class Pedido implements Serializable {
 		this.cliente = cliente;
 	}
 
-	public Produto getProduto() {
-		return produto;
-	}
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public Filial getFilial() {
-		return filial;
-	}
-	public void setFilial(Filial filial) {
-		this.filial = filial;
-	}
-
 	public Date getData() {
 		return data;
 	}
@@ -107,32 +65,11 @@ public class Pedido implements Serializable {
 		this.data = data;
 	}
 
-	public BigDecimal getTotal() {
-		return total;
-	}
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-	public Cliente getClienteNaoNulo() {
-		if (cliente == null) {
-			return new Cliente();
-		}
-		return this.cliente;
-	}
-	
-	public Produto getProdutoNaoNulo() {
-		if (produto == null) {
-			return new Produto();
-		}
-		return this.produto;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
 		return result;
 	}
 
@@ -145,12 +82,12 @@ public class Pedido implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Pedido other = (Pedido) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
+		if (numero == null) {
+			if (other.numero != null)
 				return false;
-		} else if (!codigo.equals(other.codigo))
+		} else if (!numero.equals(other.numero))
 			return false;
 		return true;
 	}
-	
+
 }

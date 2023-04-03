@@ -1,6 +1,6 @@
 package com.pxt.loja.gui;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -9,9 +9,12 @@ import javax.faces.bean.ViewScoped;
 
 import pxt.framework.business.PersistenceService;
 import pxt.framework.faces.controller.CrudController;
+import pxt.framework.faces.controller.CrudState;
 import pxt.framework.faces.controller.SearchFieldController;
 import pxt.framework.faces.exception.CrudException;
+import pxt.framework.validation.ValidationException;
 
+import com.pxt.loja.business.impl.ProdutoBO;
 import com.pxt.loja.domain.Fornecedor;
 import com.pxt.loja.domain.Marca;
 import com.pxt.loja.domain.Produto;
@@ -23,6 +26,9 @@ public class ProdutoBean extends CrudController<Produto> {
 
 	@EJB
 	private PersistenceService persistenceService;
+	@EJB
+	private ProdutoBO produtoBO;
+	
 	private Produto domain;
 	private SearchFieldController<Marca> searchMarca;
 	private SearchFieldController<Fornecedor> searchFornecedor;
@@ -46,6 +52,11 @@ public class ProdutoBean extends CrudController<Produto> {
 		return persistenceService;
 	}
 
+	public List<String> getNumeracoes() {
+		List<String> listaNumeracoes = Arrays.asList("33/34","35/36","37/38","39/40","41/42","43/44");
+		return listaNumeracoes;
+	}
+	
 	@SuppressWarnings("serial")
 	public SearchFieldController<Marca> getSearchMarca() {
 		if (this.searchMarca == null) {
@@ -110,19 +121,16 @@ public class ProdutoBean extends CrudController<Produto> {
 	
 	@Override
 	protected void antesSalvar() throws CrudException {
-		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
-			throw new CrudException("A descrição é um campo obrigatório!");
+		try {
+			produtoBO.validarCadastro(getDomain());
+			
+			if (this.getEstadoCrud() == CrudState.ST_INSERT && produtoBO.verificarExisteProduto(getDomain().getDescricao(), getDomain().getFornecedor().getCodigo())) {
+				throw new CrudException("Já possui esse produto cadastrado!");
+			}
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new CrudException(e.getMessage());
 		}
-		if (getDomain().getPreco() == null || getDomain().getPreco().compareTo(BigDecimal.ZERO) <= 0) {
-			throw new CrudException("O preço não pode ser 0, negativo ou vazio!");
-		}
-		if (getDomain().getMarca() == null) {
-			throw new CrudException("A marca é um campo obrigatório!");
-		}
-		if (getDomain().getFornecedor() == null) {
-			throw new CrudException("O fornecedor é um campo obrigatório!");
-		}
-		super.antesSalvar();
 	}
 	
 }

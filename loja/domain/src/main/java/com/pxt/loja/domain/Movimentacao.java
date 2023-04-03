@@ -33,7 +33,6 @@ public class Movimentacao implements Serializable {
 	@JoinColumn(name = "CODPROD", referencedColumnName = "CODPROD")
 	private Produto produto;
 	
-	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DESOPR")
 	private Operacao operacao;
@@ -44,10 +43,8 @@ public class Movimentacao implements Serializable {
 	@Column(name = "QNTMOV")
 	private Integer quantidade;
 	
-	
 	public Movimentacao() {
 	}
-
 	
 	public Movimentacao(Long codigo, String descricao, Produto produto,
 			Operacao operacao, Date data, Integer quantidade) {
@@ -60,7 +57,6 @@ public class Movimentacao implements Serializable {
 		this.quantidade = quantidade;
 	}
 
-
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -72,6 +68,9 @@ public class Movimentacao implements Serializable {
 		return descricao;
 	}
 	public void setDescricao(String descricao) {
+		if (descricao != null) {
+			descricao = descricao.trim();
+		}
 		this.descricao = descricao;
 	}
 
@@ -103,8 +102,6 @@ public class Movimentacao implements Serializable {
 		this.quantidade = quantidade;
 	}
 
-
-	//Método para pegar o Produto não nulo para usar no xhtml
 	public Produto getProdutoNaoNulo() {
 		if (produto == null) {
 			return new Produto();
@@ -112,7 +109,6 @@ public class Movimentacao implements Serializable {
 		return this.produto;
 	}
 	
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -120,7 +116,6 @@ public class Movimentacao implements Serializable {
 		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -139,9 +134,9 @@ public class Movimentacao implements Serializable {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return descricao;
 	}
+	
 }

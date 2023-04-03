@@ -17,15 +17,13 @@ import com.pxt.loja.business.impl.EstoqueBO;
 import com.pxt.loja.business.impl.MovimentacaoBO;
 import com.pxt.loja.business.impl.PedidoBO;
 import com.pxt.loja.domain.Cliente;
-import com.pxt.loja.domain.Estoque;
-import com.pxt.loja.domain.Filial;
 import com.pxt.loja.domain.Operacao;
 import com.pxt.loja.domain.Pedido;
 import com.pxt.loja.domain.Produto;
 
 @ManagedBean
 @ViewScoped
-public class ReservarMercadoriaBean extends CrudController<Pedido>{
+public class RealizarPedidoBean extends CrudController<Pedido>{
 	private static final long serialVersionUID = 1L;
 	
 	@EJB
@@ -68,9 +66,6 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 		this.descricaoMovimentacao = descricaoMovimentacao;
 	}
 
-	public List<Filial> getTodasFiliais() {
-		return Filial.getTodasFiliais();
-	}
 	
 	@SuppressWarnings("serial")
 	public SearchFieldController<Cliente> getSearchCliente() {
@@ -79,7 +74,8 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 
 				@Override
 				public Cliente getObject() {
-					return getDomain().getClienteNaoNulo();
+					//ajustar para cliente nao nulo
+					return getDomain().getCliente();
 				}
 
 				@Override
@@ -103,7 +99,7 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 		return this.searchCliente;
 	}
 	
-	@SuppressWarnings("serial")
+	/*/@SuppressWarnings("serial")
 	public SearchFieldController<Produto> getSearchProduto() {
 		if (this.searchProduto == null) {
 			this.searchProduto = new SearchFieldController<Produto>(this.persistenceService, Produto.class) {
@@ -132,28 +128,28 @@ public class ReservarMercadoriaBean extends CrudController<Pedido>{
 			};
 		}
 		return this.searchProduto;
-	}
+	}/*/
 	
 	@Override
 	protected void antesSalvar() throws CrudException {
 		if (getDomain().getCliente() == null) {
 			throw new CrudException("É obrigatório preencher o cliente!");
 		}
-		if (getDomain().getProduto() == null) {
+		/*/if (getDomain().getProduto() == null) {
 			throw new CrudException("É obrigatório preencher o produto!");
 		}
 		if (getDomain().getQuantidade() == null || getDomain().getQuantidade() <= 0) {
 			throw new CrudException("Não é possível inserir quantidade 0, negativo ou vazio!");
-		}
+		}/*/
 		super.antesSalvar();
 	}
 	
 	@Override
 	protected void salvar() throws CrudException, TransactionException {
 		try {
-			Estoque estoque = estoqueBO.reservarMercadoria(getDomain());
-			pedidoBO.salvarPedido(getDomain());
-			movimentacaoBO.salvarMovimentacao(estoque, descricaoMovimentacao, Operacao.RESERVA);
+			//estoqueBO.reservarMercadoria(getDomain());
+			Pedido pedido = pedidoBO.salvarPedido(getDomain());
+			//movimentacaoBO.salvarMovimentacao(null, pedido, descricaoMovimentacao, Operacao.RESERVA);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new CrudException(e.getMessage());
