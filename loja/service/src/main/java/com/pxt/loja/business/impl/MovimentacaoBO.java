@@ -1,6 +1,7 @@
 package com.pxt.loja.business.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -20,7 +21,7 @@ public class MovimentacaoBO {
 	private EstoqueBO estoqueBO;
 	
 	
-	public void validarCampos(Movimentacao movimentacao) throws ValidationException {
+	public void validarCamposMovimentacao(Movimentacao movimentacao) throws ValidationException {
 		if (movimentacao.getDescricao() == null || movimentacao.getDescricao().isEmpty()) {
 			throw new ValidationException("A descrição é um campo obrigatório!");
 		}
@@ -34,7 +35,10 @@ public class MovimentacaoBO {
 			throw new ValidationException("A quantidade não pode ser 0, negativo ou vazio!");
 		}
 	}
-
+	
+	public List<Movimentacao> buscarMovimentacao(Movimentacao movimentacao, Date dataInicial, Date dataFinal) throws PersistenceException{
+		return movimentacaoDAO.buscarMovimentacao(movimentacao, dataInicial, dataFinal);
+	}
 	
 	public void salvar(Movimentacao movimentacao) throws PersistenceException, ValidationException {
 		try {

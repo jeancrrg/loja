@@ -92,7 +92,7 @@ public class MovimentarMercadoriaBean extends CrudController<Movimentacao>{
 	@Override
 	protected void antesSalvar() throws CrudException {
 		try {
-			movimentacaoBO.validarCampos(getDomain());
+			movimentacaoBO.validarCamposMovimentacao(getDomain());
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			throw new CrudException(e.getMessage());

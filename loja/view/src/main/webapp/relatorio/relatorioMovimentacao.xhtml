@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:pxt="http://www.peixoto.com.br/pxtFaces"
+	xmlns:pxtfl="http://www.peixoto.com.br/jsf" xmlns:pxtfc="http://www.peixoto.com.br/jsf/core" xmlns:pxtcc="http://java.sun.com/jsf/composite/peixoto">
+	
+<ui:composition template="/META-INF/facelets/templates/search.xhtml">
+	<ui:param name="form_id" value="formRelatorioMovimentacao" />
+	<ui:param name="backingBean" value="#{relatorioMovimentacaoBean}" />
+	<ui:param name="titulo" value="Relatório movimentação" />
+	
+	<ui:define name="css">
+		<style type="text/css">
+			.ajusta_panel {
+				padding: 0px;
+			}
+		</style>
+	</ui:define>
+	
+	<ui:define name="panelFiltro">
+	 	
+		<pxt:panelGrid columnsWidth="3%;3%;20%;12%;30%" width="100%">
+			<h:outputText value="Data inicial" styleClass="outputText"/>
+			<h:outputText value="Data final" styleClass="outputText"/>
+			<h:outputText value="Produto" styleClass="outputText"/>
+			<h:outputText value="Operação" styleClass="outputText"/>
+			<h:outputText value="Descrição" styleClass="outputText"/>
+			
+			<rich:calendar datePattern="dd/MM/yyyy" value="#{relatorioMovimentacaoBean.dataInicial}" />
+			<rich:calendar datePattern="dd/MM/yyyy" value="#{relatorioMovimentacaoBean.dataFinal}" />
+			
+			<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{relatorioMovimentacaoBean.searchProduto}" modalTitle="Produto" width="95%"
+			render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+				<ui:define name="filtros">
+					<pxt:panelGrid columnsWidth="10%;90%">
+							
+						<h:outputText value="Código" styleClass="outputText" />
+						<h:inputText value="#{relatorioMovimentacaoBean.searchProduto.searchObject.codigo}" maxlength="8" style="width: 10%;">
+							<pxt:onlyNumber />
+						</h:inputText>
+									
+						<h:outputText value="Descrição" styleClass="outputText" />
+						<h:inputText value="#{relatorioMovimentacaoBean.searchProduto.searchObject.descricao}" maxlength="180" style="width: 30%;">
+							<pxt:upperCase />
+						</h:inputText>
+									
+					</pxt:panelGrid>
+				</ui:define>		
+						
+				<ui:define name="colunas">
+					<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+					<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+				</ui:define>
+			</pxtfl:searchField>
+			
+			<h:selectOneMenu value="#{relatorioMovimentacaoBean.domain.operacao}" style="width:93%" converter="defaultConverter">
+				<f:selectItem itemLabel="" itemValue=""/>
+				<f:selectItems value="#{relatorioMovimentacaoBean.operacoesMovimentacao}" var="obj" itemLabel="#{obj}"/>
+			</h:selectOneMenu>
+
+			<h:inputText value="#{relatorioMovimentacaoBean.domain.descricao}" style="width:90%" maxlength="14">
+				<pxt:upperCase />
+			</h:inputText>
+				
+		</pxt:panelGrid>
+		
+	</ui:define>
+
+	<ui:define name="colunasTabela">
+	
+		<pxtfl:column headerValue="Data" value="#{obj.data}"/>
+		<pxtfl:column headerValue="Código_Prod" value="#{obj.produto.codigo}"/>
+		<pxtfl:column headerValue="Produto" value="#{obj.produto}"/>
+		<pxtfl:column headerValue="Operação" value="#{obj.operacao}"/>
+		<pxtfl:column headerValue="Quantidade" value="#{obj.quantidade}"/>
+		<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" />
+		
+	</ui:define>
+	
+</ui:composition>
+</html>

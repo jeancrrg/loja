@@ -44,6 +44,7 @@ public class EstoqueBean extends SearchController<Estoque>{
 		return persistenceService;
 	}
 	
+	
 	@Override
 	protected void busca() {
 		try {
