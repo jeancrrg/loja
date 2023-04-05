@@ -79,7 +79,13 @@ public class Produto implements Serializable {
 	}
 	public void setDescricao(String descricao) {
 		if (descricao != null) {
-			descricao = descricao.replaceAll("[.()'-,]", "").trim();
+			descricao = descricao.replaceAll("[~,{}=╢@#$%&*!<>?()+.()'/-]", "").trim();
+			descricao = descricao.replaceAll("[аюцб]", "A");
+			descricao = descricao.replaceAll("[ихй]", "E");
+			descricao = descricao.replaceAll("[млн]", "I");
+			descricao = descricao.replaceAll("[срту]", "O");
+			descricao = descricao.replaceAll("[зыш]", "U");
+			descricao = descricao.replaceAll("[г]", "C");
 		}
 		this.descricao = descricao;
 	}
@@ -96,7 +102,13 @@ public class Produto implements Serializable {
 	}
 	public void setModelo(String modelo) {
 		if (modelo != null) {
-			modelo = modelo.replaceAll("[.()'-,]", "").trim();
+			modelo = modelo.replaceAll("[~,{}=╢@#$%&*!<>?()+.()'/-]", "").trim();
+			modelo = modelo.replaceAll("[аюцб]", "A");
+			modelo = modelo.replaceAll("[ихй]", "E");
+			modelo = modelo.replaceAll("[млн]", "I");
+			modelo = modelo.replaceAll("[срту]", "O");
+			modelo = modelo.replaceAll("[зыш]", "U");
+			modelo = modelo.replaceAll("[г]", "C");
 		}
 		this.modelo = modelo;
 	}

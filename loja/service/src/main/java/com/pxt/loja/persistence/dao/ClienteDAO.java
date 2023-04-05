@@ -11,13 +11,12 @@ import com.pxt.loja.domain.Cliente;
 public class ClienteDAO extends LOJAHibernateDAO<Cliente, Long>{
 
 	
-	public Boolean verificarCpfCnpj(String cpfCnpj) {
+	public Boolean verificarExisteCpfCnpj(String cpfCnpj) {
 		Criteria criteria = getSession().createCriteria(Cliente.class);
 		
 		if (cpfCnpj != null && !cpfCnpj.isEmpty()) {
 			criteria.add(Restrictions.eq("cpfCnpj", cpfCnpj));
 		}
-		
 		if (criteria.list().isEmpty()) {
 			return false;
 		} else {

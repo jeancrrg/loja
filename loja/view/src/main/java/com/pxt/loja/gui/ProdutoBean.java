@@ -1,5 +1,6 @@
 package com.pxt.loja.gui;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import pxt.framework.faces.controller.CrudController;
 import pxt.framework.faces.controller.CrudState;
 import pxt.framework.faces.controller.SearchFieldController;
 import pxt.framework.faces.exception.CrudException;
-import pxt.framework.validation.ValidationException;
 
 import com.pxt.loja.business.impl.ProdutoBO;
 import com.pxt.loja.domain.Fornecedor;
@@ -121,15 +121,27 @@ public class ProdutoBean extends CrudController<Produto> {
 	
 	@Override
 	protected void antesSalvar() throws CrudException {
-		try {
-			produtoBO.validarCadastro(getDomain());
-			
-			if (this.getEstadoCrud() == CrudState.ST_INSERT && produtoBO.verificarExisteProduto(getDomain().getDescricao(), getDomain().getFornecedor().getCodigo())) {
-				throw new CrudException("Já possui esse produto cadastrado!");
-			}
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new CrudException(e.getMessage());
+		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
+			throw new CrudException("A descrição é um campo obrigatório!");
+		}
+		if (getDomain().getPreco() == null || getDomain().getPreco().compareTo(BigDecimal.ZERO) <= 0) {
+			throw new CrudException("O preço não pode ser 0, negativo ou vazio!");
+		}
+		if (getDomain().getTamanho() == null) {
+			throw new CrudException("O tamanho é um campo obrigatório!");
+		}
+		if (getDomain().getModelo() == null) {
+			throw new CrudException("O modelo é um campo obrigatório!");
+		}
+		if (getDomain().getMarca() == null) {
+			throw new CrudException("A marca é um campo obrigatório!");
+		}
+		if (getDomain().getFornecedor() == null) {
+			throw new CrudException("O fornecedor é um campo obrigatório!");
+		}
+		
+		if (this.getEstadoCrud() == CrudState.ST_INSERT && produtoBO.verificarExisteProduto(getDomain().getDescricao(), getDomain().getFornecedor().getCodigo())) {
+			throw new CrudException("Já possui esse produto cadastrado!");
 		}
 	}
 	

@@ -24,12 +24,6 @@ public class EstoqueBO {
 		return estoqueDAO.buscarEstoque(estoque);
 	}
 	
-	public void validarCampos(Estoque estoque) throws ValidationException {
-		if (estoque.getProduto() == null) {
-			throw new ValidationException("O produto é obrigatório!");
-		}
-	}
-	
 	public void validarEstoque(Estoque estoque, Integer quantidade, String tipoEstoque) throws ValidationException {
 		if (tipoEstoque.equals("RECEBIMENTO")) {
 			if (quantidade > estoque.getQuantidadeRecebimento()) {

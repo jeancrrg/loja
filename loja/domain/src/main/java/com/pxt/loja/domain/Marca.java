@@ -44,7 +44,13 @@ public class Marca implements Serializable {
 	
 	public void setNome(String nome) {
 		if (nome != null) {
-			nome = nome.trim();
+			nome = nome.replaceAll("[~,{}=╢@#$%&*!<>?()+.()'/-]", "").trim();
+			nome = nome.replaceAll("[аюцб]", "A");
+			nome = nome.replaceAll("[ихй]", "E");
+			nome = nome.replaceAll("[млн]", "I");
+			nome = nome.replaceAll("[срту]", "O");
+			nome = nome.replaceAll("[зыш]", "U");
+			nome = nome.replaceAll("[г]", "C");
 		}
 		this.nome = nome;
 	}

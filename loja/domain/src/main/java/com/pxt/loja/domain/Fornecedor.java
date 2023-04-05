@@ -61,7 +61,13 @@ public class Fornecedor implements Serializable {
 	}
 	public void setNome(String nome) {
 		if (nome != null) {
-			nome = nome.trim();
+			nome = nome.replaceAll("[~,{}=╢@#$%&*!<>?()+.()'/-]", "").trim();
+			nome = nome.replaceAll("[аюцб]", "A");
+			nome = nome.replaceAll("[ихй]", "E");
+			nome = nome.replaceAll("[млн]", "I");
+			nome = nome.replaceAll("[срту]", "O");
+			nome = nome.replaceAll("[зыш]", "U");
+			nome = nome.replaceAll("[г]", "C");
 		}
 		this.nome = nome;
 	}
@@ -91,7 +97,13 @@ public class Fornecedor implements Serializable {
 	}
 	public void setEmail(String email) {
 		if (email != null) {
-			email = email.replaceAll("[()'/-]", "").replace(" ", "");
+			email = email.replaceAll("[~,{}=╢#$%&*!<>?()+()'/-]", "").replace(" ", "");;
+			email = email.replaceAll("[аюцб]", "A");
+			email = email.replaceAll("[ихй]", "E");
+			email = email.replaceAll("[млн]", "I");
+			email = email.replaceAll("[срту]", "O");
+			email = email.replaceAll("[зыш]", "U");
+			email = email.replaceAll("[г]", "C");
 		}
 		this.email = email;
 	}

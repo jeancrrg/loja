@@ -19,7 +19,10 @@ public class EstoqueDAO extends LOJAHibernateDAO<Estoque, Long> {
 		try {
 			Criteria criteria = getSession().createCriteria(Estoque.class);
 	
-			if (estoque.getProduto() != null && estoque.getProduto().getCodigo() != null) {
+			if (estoque.getProdutoNaoNulo().getMarca() != null) {
+				criteria.add(Restrictions.eq("produto.marca.codigo", estoque.getProduto().getMarca().getCodigo()));
+			}
+			else if (estoque.getProduto() != null && estoque.getProduto().getCodigo() != null) {
 				criteria.add(Restrictions.eq("produto.codigo", estoque.getProduto().getCodigo()));
 			}
 			

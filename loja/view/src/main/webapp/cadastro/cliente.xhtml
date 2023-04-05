@@ -12,7 +12,7 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="5%;20%;10%;15%;10%;10%" width="80%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="6%;20%;8%;15%;8%;10%" width="70%">
 				
 				<h:outputLabel value="Código" styleClass="outputText" />
 				<h:outputLabel value="Nome" styleClass="outputText" />
@@ -24,19 +24,19 @@
 				</pxt:cell>
 				
 				
-				<h:inputText value="#{clienteBean.domain.codigo}" style="width:90%" maxlength="14" disabled="#{clienteBean.disabledOnInsEdi}" >
+				<h:inputText value="#{clienteBean.domain.codigo}" style="width:88%" maxlength="14" disabled="#{clienteBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.nome}" style="width:98%" maxlength="180" disabled="#{clienteBean.disabledOnDefault}" >
+				<h:inputText value="#{clienteBean.domain.nome}" style="width:96%" maxlength="180" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:upperCase />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.cpfCnpj}" style="width:95%" maxlength="14" disabled="#{clienteBean.disabledOnDefault}" >
+				<h:inputText value="#{clienteBean.domain.cpfCnpj}" style="width:91%" maxlength="14" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				<h:inputText value="#{clienteBean.domain.email}" style="width:95%" maxlength="50" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:upperCase />
 				</h:inputText>
-				<h:inputText value="#{clienteBean.domain.telefone}" style="width:95%" maxlength="11" disabled="#{clienteBean.disabledOnDefault}" >
+				<h:inputText value="#{clienteBean.domain.telefone}" style="width:91%" maxlength="11" disabled="#{clienteBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				
@@ -48,7 +48,7 @@
 		</ui:define>
 		
 		
-		<ui:define name="colunasTabela" columnsWidth="10%;10%;10%;10%;10%;10%">
+		<ui:define name="colunasTabela">
 		
 			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
 			<pxtfl:column headerValue="Nome" value="#{obj.nome}" />

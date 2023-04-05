@@ -18,7 +18,7 @@
 				<h:outputLabel value="Nome" styleClass="outputText" />
 				
 				
-				<h:inputText value="#{marcaBean.domain.codigo}" style="width:90%" maxlength="14" disabled="#{marcaBean.disabledOnInsEdi}" >
+				<h:inputText value="#{marcaBean.domain.codigo}" style="width:88%" maxlength="14" disabled="#{marcaBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				<h:inputText value="#{marcaBean.domain.nome}" style="width:98%" maxlength="180" disabled="#{marcaBean.disabledOnDefault}" >
@@ -30,7 +30,7 @@
 		</ui:define>
 		
 		
-		<ui:define name="colunasTabela" columnsWidth="10%;10%;">
+		<ui:define name="colunasTabela">
 			<pxtfl:column headerValue="Código" value="#{obj.codigo}" />
 			<pxtfl:column headerValue="Nome" value="#{obj.nome}" />
 		</ui:define>		

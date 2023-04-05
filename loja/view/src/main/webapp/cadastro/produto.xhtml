@@ -12,14 +12,14 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="5%;20%;20%;10%" width="60%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="6%;20%;20%;10%" width="60%">
 			
 				<h:outputLabel value="Código" styleClass="outputText" />
 				<h:outputLabel value="Descrição" styleClass="outputText" />
 				<h:outputLabel value="Modelo" styleClass="outputText" />
 				<h:outputLabel value="Preço" styleClass="outputText" />
 				
-				<h:inputText value="#{produtoBean.domain.codigo}" style="width:90%" maxlength="14" disabled="#{produtoBean.disabledOnInsEdi}" >
+				<h:inputText value="#{produtoBean.domain.codigo}" style="width:86%" maxlength="14" disabled="#{produtoBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				<h:inputText value="#{produtoBean.domain.descricao}" style="width:95%" maxlength="180" disabled="#{produtoBean.disabledOnDefault}" >
@@ -44,7 +44,7 @@
 				</h:panelGroup>
 				
 				
-				<h:selectOneMenu value="#{produtoBean.domain.tamanho}" style="width:98%" converter="defaultConverter" disabled="#{produtoBean.disabledOnDefault}">
+				<h:selectOneMenu value="#{produtoBean.domain.tamanho}" style="width:94%" converter="defaultConverter" disabled="#{produtoBean.disabledOnDefault}">
 					<f:selectItem itemLabel="" itemValue=""/>
 					<f:selectItems value="#{produtoBean.numeracoes}" var="obj" itemLabel="#{obj}"/>
 				</h:selectOneMenu>

@@ -30,7 +30,7 @@
 			<rich:calendar datePattern="dd/MM/yyyy" value="#{relatorioMovimentacaoBean.dataInicial}" />
 			<rich:calendar datePattern="dd/MM/yyyy" value="#{relatorioMovimentacaoBean.dataFinal}" />
 			
-			<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{relatorioMovimentacaoBean.searchProduto}" modalTitle="Produto" width="95%"
+			<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{relatorioMovimentacaoBean.searchProduto}" modalTitle="Produto" width="98%"
 			render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
 				<ui:define name="filtros">
 					<pxt:panelGrid columnsWidth="10%;90%">
@@ -54,7 +54,7 @@
 				</ui:define>
 			</pxtfl:searchField>
 			
-			<h:selectOneMenu value="#{relatorioMovimentacaoBean.domain.operacao}" style="width:93%" converter="defaultConverter">
+			<h:selectOneMenu value="#{relatorioMovimentacaoBean.domain.operacao}" style="width:95%" converter="defaultConverter">
 				<f:selectItem itemLabel="" itemValue=""/>
 				<f:selectItems value="#{relatorioMovimentacaoBean.operacoesMovimentacao}" var="obj" itemLabel="#{obj}"/>
 			</h:selectOneMenu>

@@ -18,7 +18,6 @@ public class ProdutoDAO extends LOJAHibernateDAO<Produto, Long>{
 			criteria.add(Restrictions.like("descricao", descricao));
 			criteria.add(Restrictions.eq("fornecedor.codigo", codigoFornecedor));
 		}
-		
 		if (criteria.list().isEmpty()) {
 			return false;
 		} else {

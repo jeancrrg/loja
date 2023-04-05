@@ -12,7 +12,7 @@
 	
 		<ui:define name="panelCadastro">
 			
-			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="5%;20%;10%;10%;15%" width="70%">
+			<pxt:panelGrid id="panelCodigoDescricao" columnsWidth="6%;20%;8%;8%;15%" width="65%">
 			
 				<h:outputLabel value="Código" styleClass="outputText" />
 				<h:outputLabel value="Nome" styleClass="outputText" />
@@ -20,16 +20,16 @@
 				<h:outputLabel value="Telefone" styleClass="outputText" />
 				<h:outputLabel value="Email" styleClass="outputText" />
 				
-				<h:inputText value="#{fornecedorBean.domain.codigo}" style="width:90%" maxlength="14" disabled="#{fornecedorBean.disabledOnInsEdi}" >
+				<h:inputText value="#{fornecedorBean.domain.codigo}" style="width:88%" maxlength="14" disabled="#{fornecedorBean.disabledOnInsEdi}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{fornecedorBean.domain.nome}" style="width:98%" maxlength="180" disabled="#{fornecedorBean.disabledOnDefault}" >
+				<h:inputText value="#{fornecedorBean.domain.nome}" style="width:96%" maxlength="180" disabled="#{fornecedorBean.disabledOnDefault}" >
 					<pxt:upperCase />
 				</h:inputText>
-				<h:inputText value="#{fornecedorBean.domain.cnpj}" style="width:95%" maxlength="14" disabled="#{fornecedorBean.disabledOnDefault}" >
+				<h:inputText value="#{fornecedorBean.domain.cnpj}" style="width:90%" maxlength="14" disabled="#{fornecedorBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
-				<h:inputText value="#{fornecedorBean.domain.telefone}" style="width:95%" maxlength="11" disabled="#{fornecedorBean.disabledOnDefault}" >
+				<h:inputText value="#{fornecedorBean.domain.telefone}" style="width:92%" maxlength="11" disabled="#{fornecedorBean.disabledOnDefault}" >
 					<pxt:onlyNumber />
 				</h:inputText>
 				<h:inputText value="#{fornecedorBean.domain.email}" style="width:95%" maxlength="50" disabled="#{fornecedorBean.disabledOnDefault}" >

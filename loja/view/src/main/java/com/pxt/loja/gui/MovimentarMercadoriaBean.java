@@ -91,11 +91,17 @@ public class MovimentarMercadoriaBean extends CrudController<Movimentacao>{
 	
 	@Override
 	protected void antesSalvar() throws CrudException {
-		try {
-			movimentacaoBO.validarCamposMovimentacao(getDomain());
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new CrudException(e.getMessage());
+		if (getDomain().getDescricao() == null || getDomain().getDescricao().isEmpty()) {
+			throw new CrudException("A descrição é um campo obrigatório!");
+		}
+		if (getDomain().getProduto() == null) {
+			throw new CrudException("O produto é um campo obrigatório!");
+		}
+		if (getDomain().getOperacao() == null) {
+			throw new CrudException("A operação é um campo obrigatório!");
+		}
+		if (getDomain().getQuantidade() == null || getDomain().getQuantidade() <= 0) {
+			throw new CrudException("A quantidade não pode ser 0, negativo ou vazio!");
 		}
 	}
 	
@@ -106,6 +112,7 @@ public class MovimentarMercadoriaBean extends CrudController<Movimentacao>{
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new CrudException(e.getMessage());
+			
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			throw new CrudException(e.getMessage());

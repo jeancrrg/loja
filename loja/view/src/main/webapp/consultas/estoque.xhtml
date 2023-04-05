@@ -20,8 +20,9 @@
 	
 	<ui:define name="panelFiltro">
 	
-		<pxt:panelGrid columnsWidth="20%" width="20%">
+		<pxt:panelGrid columnsWidth="20%;20%" width="40%">
 			<h:outputText value="Produto" styleClass="outputText"/>
+			<h:outputText value="Marca" styleClass="outputText"/>
 			
 			
 			<pxtfl:searchField value="Pesquisar" id="searchProduto" searchProperty="descricao" controller="#{estoqueBean.searchProduto}" modalTitle="Produto" width="98%"
@@ -45,6 +46,30 @@
 				<ui:define name="colunas">
 					<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
 					<pxtfl:column headerValue="Descrição" value="#{obj.descricao}" columnWidth="10%" />
+				</ui:define>
+			</pxtfl:searchField>
+			
+			<pxtfl:searchField value="Pesquisar" id="searchMarca" searchProperty="nome" controller="#{estoqueBean.searchMarca}" modalTitle="Marca" width="98%"
+			render="mensagemGeral,messagePane,@this,btnNew, btnCancel, btnSave, pnlInfo, pnlMsg, pnlAcoCom, btnCancelar, btnNovo, btnSalvar, btnCnfAbg, pnlImagem, table, pnlTable">
+				<ui:define name="filtros">
+					<pxt:panelGrid columnsWidth="10%;90%">
+							
+						<h:outputText value="Código" styleClass="outputText" />
+						<h:inputText value="#{estoqueBean.searchMarca.searchObject.codigo}" maxlength="8" style="width: 10%;">
+							<pxt:onlyNumber />
+						</h:inputText>
+									
+						<h:outputText value="Nome" styleClass="outputText" />
+						<h:inputText value="#{estoqueBean.searchMarca.searchObject.nome}" maxlength="180" style="width: 30%;">
+							<pxt:upperCase />
+						</h:inputText>
+									
+					</pxt:panelGrid>
+				</ui:define>		
+						
+				<ui:define name="colunas">
+					<pxtfl:column headerValue="Código" value="#{obj.codigo}" columnWidth="10%" />
+					<pxtfl:column headerValue="Nome" value="#{obj.nome}" columnWidth="10%" />
 				</ui:define>
 			</pxtfl:searchField>
 

@@ -14,6 +14,7 @@ import pxt.framework.validation.ValidationException;
 
 import com.pxt.loja.business.impl.EstoqueBO;
 import com.pxt.loja.domain.Estoque;
+import com.pxt.loja.domain.Marca;
 import com.pxt.loja.domain.Produto;
 
 @ManagedBean
@@ -28,6 +29,8 @@ public class EstoqueBean extends SearchController<Estoque>{
 	
 	private Estoque domain;
 	private SearchFieldController<Produto> searchProduto;
+	private SearchFieldController<Marca> searchMarca;
+	
 	
 	public Estoque getDomain() {
 		if (domain == null) {
@@ -44,21 +47,26 @@ public class EstoqueBean extends SearchController<Estoque>{
 		return persistenceService;
 	}
 	
+	public void validarCampos() throws ValidationException {
+		if (getDomain().getProduto() == null) {
+			throw new ValidationException("O produto é obrigatório!");
+		}
+	}
 	
 	@Override
 	protected void busca() {
 		try {
-			estoqueBO.validarCampos(getDomain());
+			//validarCampos();
 			List<Estoque> listaEstoque = estoqueBO.buscarEstoque(getDomain());
 			if (listaEstoque.isEmpty()) {
 				this.msgWarn("Nenhum produto encontrado no estoque!");
 			}
 			this.setListagem(listaEstoque);
 			
-		} catch (ValidationException e) {
+		/*/} catch (ValidationException e) {
 			e.printStackTrace();
 			this.msgWarn(e.getMessage());
-			
+			/*/
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			this.msgError(e, e.getMessage());
@@ -93,6 +101,37 @@ public class EstoqueBean extends SearchController<Estoque>{
 			};
 		}
 		return this.searchProduto;
+	}
+	
+	
+	@SuppressWarnings("serial")
+	public SearchFieldController<Marca> getSearchMarca() {
+		if (this.searchMarca == null) {
+			this.searchMarca = new SearchFieldController<Marca>(this.persistenceService, Marca.class) {
+
+				@Override
+				public Marca getObject() {
+					return getDomain().getProdutoNaoNulo().getMarca();
+				}
+
+				@Override
+				public void setObject(Marca marca) {
+					getDomain().getProduto().setMarca(marca);
+				}
+				
+				@Override
+				public void buscar() throws Exception {
+					setResultList((List<Marca>) persistenceService.findByExample(((Marca) getSearchObject())));
+				}
+				
+				@Override
+				public void limpar() {
+					super.limpar();
+				}
+				
+			};
+		}
+		return this.searchMarca;
 	}
 	
 }

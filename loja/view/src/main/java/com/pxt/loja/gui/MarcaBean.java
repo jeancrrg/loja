@@ -8,7 +8,6 @@ import pxt.framework.business.PersistenceService;
 import pxt.framework.faces.controller.CrudController;
 import pxt.framework.faces.controller.CrudState;
 import pxt.framework.faces.exception.CrudException;
-import pxt.framework.validation.ValidationException;
 
 import com.pxt.loja.business.impl.MarcaBO;
 import com.pxt.loja.domain.Marca;
@@ -46,17 +45,13 @@ public class MarcaBean extends CrudController<Marca>{
 
 	@Override
 	protected void antesSalvar() throws CrudException {
-		try {
-			marcaBO.validarCampos(getDomain().getNome());
-			
-			if (this.getEstadoCrud() == CrudState.ST_INSERT && marcaBO.verificarExisteNome(getDomain().getNome())) {
-				throw new CrudException("Já possui essa marca cadastrada!");
-			}
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new CrudException(e.getMessage());
+		if (getDomain().getNome() == null || getDomain().getNome().isEmpty()) {
+			throw new CrudException("O nome é um campo obrigatório!");
 		}
-		
+			
+		if (this.getEstadoCrud() == CrudState.ST_INSERT && marcaBO.verificarExisteNome(getDomain().getNome())) {
+			throw new CrudException("Já possui essa marca cadastrada!");
+		}
 	}
 	
 }
